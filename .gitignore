@@ -1,0 +1,16 @@
+# Virtual environment
+backend/venv/
+
+# Database
+*.db
+
+# Audio files (troppo grandi per git)
+audio/announcements/*.mp3
+audio/music/*.mp3
+
+# Python
+__pycache__/
+*.py[cod]
+
+# Logs
+*.log

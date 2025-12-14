@@ -1,0 +1,235 @@
+<mxfile host="app.diagrams.net" modified="2024-01-15T10:00:00.000Z" agent="Mozilla/5.0" version="22.1.5" etag="seafyradio-tts">
+  <diagram name="Flusso TTS Multi-lingua" id="tts-diagram">
+    <mxGraphModel dx="1434" dy="780" grid="1" gridSize="10" guides="1" tooltips="1" connect="1" arrows="1" fold="1" page="1" pageScale="1" pageWidth="1200" pageHeight="800" math="0" shadow="0">
+      <root>
+        <mxCell id="0" />
+        <mxCell id="1" parent="0" />
+
+        <!-- Titolo -->
+        <mxCell id="title" value="SeafyRadio - Generazione TTS Multi-lingua" style="text;html=1;strokeColor=none;fillColor=none;align=center;verticalAlign=middle;whiteSpace=wrap;rounded=0;fontSize=24;fontStyle=1;fontColor=#1a1a2e;" vertex="1" parent="1">
+          <mxGeometry x="350" y="20" width="500" height="40" as="geometry" />
+        </mxCell>
+
+        <!-- Step 1: Input -->
+        <mxCell id="step1" value="1️⃣ INPUT UTENTE" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#E3F2FD;strokeColor=#1565C0;fontStyle=1;fontSize=12;" vertex="1" parent="1">
+          <mxGeometry x="40" y="80" width="200" height="35" as="geometry" />
+        </mxCell>
+
+        <mxCell id="input-box" value="" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#BBDEFB;strokeColor=#1565C0;strokeWidth=2;" vertex="1" parent="1">
+          <mxGeometry x="40" y="125" width="200" height="180" as="geometry" />
+        </mxCell>
+
+        <mxCell id="input-text" value="📝 Testo in Italiano&#xa;&quot;Benvenuti a bordo&quot;" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#E3F2FD;strokeColor=#1565C0;fontSize=10;" vertex="1" parent="1">
+          <mxGeometry x="55" y="135" width="170" height="40" as="geometry" />
+        </mxCell>
+
+        <mxCell id="input-name" value="📛 Nome annuncio&#xa;&quot;Benvenuto&quot;" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#E3F2FD;strokeColor=#1565C0;fontSize=10;" vertex="1" parent="1">
+          <mxGeometry x="55" y="185" width="170" height="35" as="geometry" />
+        </mxCell>
+
+        <mxCell id="input-voice" value="🎤 Voce: 👩 Femminile / 👨 Maschile" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#E3F2FD;strokeColor=#1565C0;fontSize=10;" vertex="1" parent="1">
+          <mxGeometry x="55" y="230" width="170" height="30" as="geometry" />
+        </mxCell>
+
+        <mxCell id="input-langs" value="🌍 Lingue: IT, EN, FR, DE, ES, EL" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#E3F2FD;strokeColor=#1565C0;fontSize=10;" vertex="1" parent="1">
+          <mxGeometry x="55" y="270" width="170" height="30" as="geometry" />
+        </mxCell>
+
+        <!-- Arrow 1-2 -->
+        <mxCell id="arr1" value="" style="endArrow=classic;html=1;strokeWidth=2;strokeColor=#7B1FA2;" edge="1" parent="1">
+          <mxGeometry relative="1" as="geometry">
+            <mxPoint x="240" y="215" as="sourcePoint" />
+            <mxPoint x="290" y="215" as="targetPoint" />
+          </mxGeometry>
+        </mxCell>
+
+        <!-- Step 2: Translation -->
+        <mxCell id="step2" value="2️⃣ TRADUZIONE" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#F3E5F5;strokeColor=#7B1FA2;fontStyle=1;fontSize=12;" vertex="1" parent="1">
+          <mxGeometry x="290" y="80" width="200" height="35" as="geometry" />
+        </mxCell>
+
+        <mxCell id="trans-box" value="" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#E1BEE7;strokeColor=#7B1FA2;strokeWidth=2;" vertex="1" parent="1">
+          <mxGeometry x="290" y="125" width="200" height="180" as="geometry" />
+        </mxCell>
+
+        <mxCell id="trans-engine" value="🔄 deep-translator&#xa;(Google Translate API)" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#CE93D8;strokeColor=#7B1FA2;fontStyle=1;fontSize=10;" vertex="1" parent="1">
+          <mxGeometry x="305" y="135" width="170" height="40" as="geometry" />
+        </mxCell>
+
+        <mxCell id="trans-it" value="🇮🇹 Benvenuti a bordo" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#F3E5F5;strokeColor=#7B1FA2;fontSize=9;" vertex="1" parent="1">
+          <mxGeometry x="305" y="185" width="80" height="30" as="geometry" />
+        </mxCell>
+        <mxCell id="trans-en" value="🇬🇧 Welcome aboard" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#F3E5F5;strokeColor=#7B1FA2;fontSize=9;" vertex="1" parent="1">
+          <mxGeometry x="395" y="185" width="80" height="30" as="geometry" />
+        </mxCell>
+        <mxCell id="trans-fr" value="🇫🇷 Bienvenue à bord" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#F3E5F5;strokeColor=#7B1FA2;fontSize=9;" vertex="1" parent="1">
+          <mxGeometry x="305" y="220" width="80" height="30" as="geometry" />
+        </mxCell>
+        <mxCell id="trans-de" value="🇩🇪 Willkommen..." style="rounded=1;whiteSpace=wrap;html=1;fillColor=#F3E5F5;strokeColor=#7B1FA2;fontSize=9;" vertex="1" parent="1">
+          <mxGeometry x="395" y="220" width="80" height="30" as="geometry" />
+        </mxCell>
+        <mxCell id="trans-es" value="🇪🇸 Bienvenidos..." style="rounded=1;whiteSpace=wrap;html=1;fillColor=#F3E5F5;strokeColor=#7B1FA2;fontSize=9;" vertex="1" parent="1">
+          <mxGeometry x="305" y="255" width="80" height="30" as="geometry" />
+        </mxCell>
+        <mxCell id="trans-el" value="🇬🇷 Καλώς ήρθατε..." style="rounded=1;whiteSpace=wrap;html=1;fillColor=#F3E5F5;strokeColor=#7B1FA2;fontSize=9;" vertex="1" parent="1">
+          <mxGeometry x="395" y="255" width="80" height="30" as="geometry" />
+        </mxCell>
+
+        <!-- Arrow 2-3 -->
+        <mxCell id="arr2" value="" style="endArrow=classic;html=1;strokeWidth=2;strokeColor=#00796B;" edge="1" parent="1">
+          <mxGeometry relative="1" as="geometry">
+            <mxPoint x="490" y="215" as="sourcePoint" />
+            <mxPoint x="540" y="215" as="targetPoint" />
+          </mxGeometry>
+        </mxCell>
+
+        <!-- Step 3: TTS Generation -->
+        <mxCell id="step3" value="3️⃣ SINTESI VOCALE" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#E0F2F1;strokeColor=#00796B;fontStyle=1;fontSize=12;" vertex="1" parent="1">
+          <mxGeometry x="540" y="80" width="200" height="35" as="geometry" />
+        </mxCell>
+
+        <mxCell id="tts-box" value="" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#B2DFDB;strokeColor=#00796B;strokeWidth=2;" vertex="1" parent="1">
+          <mxGeometry x="540" y="125" width="200" height="180" as="geometry" />
+        </mxCell>
+
+        <mxCell id="tts-engine" value="🎙️ edge-tts&#xa;(Microsoft Neural TTS)" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#4DB6AC;strokeColor=#00796B;fontStyle=1;fontSize=10;fontColor=#fff;" vertex="1" parent="1">
+          <mxGeometry x="555" y="135" width="170" height="40" as="geometry" />
+        </mxCell>
+
+        <mxCell id="tts-voices" value="Voci neurali per lingua:&#xa;it-IT-ElsaNeural (F)&#xa;en-GB-SoniaNeural (F)&#xa;fr-FR-DeniseNeural (F)&#xa;de-DE-KatjaNeural (F)&#xa;es-ES-ElviraNeural (F)&#xa;el-GR-AthinaNeural (F)" style="text;html=1;strokeColor=none;fillColor=none;align=left;fontSize=9;fontColor=#00695C;" vertex="1" parent="1">
+          <mxGeometry x="560" y="185" width="170" height="110" as="geometry" />
+        </mxCell>
+
+        <!-- Arrow 3-4 -->
+        <mxCell id="arr3" value="" style="endArrow=classic;html=1;strokeWidth=2;strokeColor=#E65100;" edge="1" parent="1">
+          <mxGeometry relative="1" as="geometry">
+            <mxPoint x="740" y="215" as="sourcePoint" />
+            <mxPoint x="790" y="215" as="targetPoint" />
+          </mxGeometry>
+        </mxCell>
+
+        <!-- Step 4: Save Files -->
+        <mxCell id="step4" value="4️⃣ SALVATAGGIO" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#FFF3E0;strokeColor=#E65100;fontStyle=1;fontSize=12;" vertex="1" parent="1">
+          <mxGeometry x="790" y="80" width="200" height="35" as="geometry" />
+        </mxCell>
+
+        <mxCell id="save-box" value="" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#FFE0B2;strokeColor=#E65100;strokeWidth=2;" vertex="1" parent="1">
+          <mxGeometry x="790" y="125" width="200" height="180" as="geometry" />
+        </mxCell>
+
+        <mxCell id="save-folder" value="📁 /audio/announcements/" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#FFCC80;strokeColor=#E65100;fontStyle=1;fontSize=10;" vertex="1" parent="1">
+          <mxGeometry x="805" y="135" width="170" height="30" as="geometry" />
+        </mxCell>
+
+        <mxCell id="save-files" value="🎵 benvenuto_it.mp3&#xa;🎵 benvenuto_en.mp3&#xa;🎵 benvenuto_fr.mp3&#xa;🎵 benvenuto_de.mp3&#xa;🎵 benvenuto_es.mp3&#xa;🎵 benvenuto_el.mp3" style="text;html=1;strokeColor=none;fillColor=none;align=left;fontSize=10;fontColor=#E65100;fontFamily=Courier New;" vertex="1" parent="1">
+          <mxGeometry x="815" y="175" width="160" height="100" as="geometry" />
+        </mxCell>
+
+        <!-- Step 5: Create Announcements -->
+        <mxCell id="step5" value="5️⃣ CREAZIONE ANNUNCI" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#E8F5E9;strokeColor=#2E7D32;fontStyle=1;fontSize=12;" vertex="1" parent="1">
+          <mxGeometry x="40" y="350" width="450" height="35" as="geometry" />
+        </mxCell>
+
+        <mxCell id="ann-box" value="" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#C8E6C9;strokeColor=#2E7D32;strokeWidth=2;" vertex="1" parent="1">
+          <mxGeometry x="40" y="395" width="450" height="120" as="geometry" />
+        </mxCell>
+
+        <mxCell id="ann-it" value="📢 Benvenuto IT" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#81C784;strokeColor=#2E7D32;fontSize=10;fontStyle=1;" vertex="1" parent="1">
+          <mxGeometry x="55" y="410" width="100" height="35" as="geometry" />
+        </mxCell>
+        <mxCell id="ann-en" value="📢 Benvenuto EN" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#81C784;strokeColor=#2E7D32;fontSize=10;fontStyle=1;" vertex="1" parent="1">
+          <mxGeometry x="165" y="410" width="100" height="35" as="geometry" />
+        </mxCell>
+        <mxCell id="ann-fr" value="📢 Benvenuto FR" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#81C784;strokeColor=#2E7D32;fontSize=10;fontStyle=1;" vertex="1" parent="1">
+          <mxGeometry x="275" y="410" width="100" height="35" as="geometry" />
+        </mxCell>
+        <mxCell id="ann-de" value="📢 Benvenuto DE" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#81C784;strokeColor=#2E7D32;fontSize=10;fontStyle=1;" vertex="1" parent="1">
+          <mxGeometry x="55" y="455" width="100" height="35" as="geometry" />
+        </mxCell>
+        <mxCell id="ann-es" value="📢 Benvenuto ES" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#81C784;strokeColor=#2E7D32;fontSize=10;fontStyle=1;" vertex="1" parent="1">
+          <mxGeometry x="165" y="455" width="100" height="35" as="geometry" />
+        </mxCell>
+        <mxCell id="ann-el" value="📢 Benvenuto EL" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#81C784;strokeColor=#2E7D32;fontSize=10;fontStyle=1;" vertex="1" parent="1">
+          <mxGeometry x="275" y="455" width="100" height="35" as="geometry" />
+        </mxCell>
+
+        <mxCell id="ann-db" value="💾 Salvati nel DB&#xa;nel gruppo scelto" style="text;html=1;strokeColor=none;fillColor=none;align=center;fontSize=10;fontColor=#2E7D32;" vertex="1" parent="1">
+          <mxGeometry x="385" y="430" width="90" height="40" as="geometry" />
+        </mxCell>
+
+        <!-- Arrow 5-6 -->
+        <mxCell id="arr4" value="" style="endArrow=classic;html=1;strokeWidth=2;strokeColor=#7B1FA2;" edge="1" parent="1">
+          <mxGeometry relative="1" as="geometry">
+            <mxPoint x="490" y="455" as="sourcePoint" />
+            <mxPoint x="540" y="455" as="targetPoint" />
+          </mxGeometry>
+        </mxCell>
+
+        <!-- Step 6: Create Sequence -->
+        <mxCell id="step6" value="6️⃣ SEQUENZA (opzionale)" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#EDE7F6;strokeColor=#512DA8;fontStyle=1;fontSize=12;" vertex="1" parent="1">
+          <mxGeometry x="540" y="350" width="450" height="35" as="geometry" />
+        </mxCell>
+
+        <mxCell id="seq-box" value="" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#D1C4E9;strokeColor=#512DA8;strokeWidth=2;" vertex="1" parent="1">
+          <mxGeometry x="540" y="395" width="450" height="120" as="geometry" />
+        </mxCell>
+
+        <mxCell id="seq-name" value="🔗 SEQUENZA: &quot;Benvenuto 6 lingue&quot;" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#B39DDB;strokeColor=#512DA8;fontStyle=1;fontSize=11;" vertex="1" parent="1">
+          <mxGeometry x="555" y="410" width="250" height="35" as="geometry" />
+        </mxCell>
+
+        <mxCell id="seq-order" value="Ordine riproduzione:&#xa;1. IT → 2. EN → 3. FR → 4. DE → 5. ES → 6. EL" style="text;html=1;strokeColor=none;fillColor=none;align=left;fontSize=10;fontColor=#512DA8;" vertex="1" parent="1">
+          <mxGeometry x="560" y="455" width="280" height="35" as="geometry" />
+        </mxCell>
+
+        <mxCell id="seq-click" value="▶️ Un click&#xa;riproduce tutti" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#7E57C2;strokeColor=#512DA8;fontColor=#fff;fontStyle=1;fontSize=10;" vertex="1" parent="1">
+          <mxGeometry x="860" y="420" width="110" height="50" as="geometry" />
+        </mxCell>
+
+        <!-- Arrow from step 4 to step 5 -->
+        <mxCell id="arr5" value="" style="endArrow=classic;html=1;strokeWidth=2;strokeColor=#2E7D32;curved=1;" edge="1" parent="1">
+          <mxGeometry relative="1" as="geometry">
+            <mxPoint x="890" y="305" as="sourcePoint" />
+            <mxPoint x="265" y="350" as="targetPoint" />
+            <Array as="points">
+              <mxPoint x="890" y="330" />
+              <mxPoint x="265" y="330" />
+            </Array>
+          </mxGeometry>
+        </mxCell>
+
+        <!-- Languages Box -->
+        <mxCell id="lang-box" value="" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#FAFAFA;strokeColor=#9E9E9E;" vertex="1" parent="1">
+          <mxGeometry x="40" y="540" width="950" height="80" as="geometry" />
+        </mxCell>
+        <mxCell id="lang-title" value="🌍 LINGUE SUPPORTATE" style="text;html=1;strokeColor=none;fillColor=none;align=center;fontStyle=1;fontSize=12;" vertex="1" parent="1">
+          <mxGeometry x="400" y="545" width="200" height="20" as="geometry" />
+        </mxCell>
+
+        <mxCell id="lang-it" value="🇮🇹&#xa;Italiano" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#C8E6C9;strokeColor=#4CAF50;fontSize=10;fontStyle=1;" vertex="1" parent="1">
+          <mxGeometry x="60" y="570" width="70" height="40" as="geometry" />
+        </mxCell>
+        <mxCell id="lang-en" value="🇬🇧&#xa;English" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#BBDEFB;strokeColor=#2196F3;fontSize=10;fontStyle=1;" vertex="1" parent="1">
+          <mxGeometry x="145" y="570" width="70" height="40" as="geometry" />
+        </mxCell>
+        <mxCell id="lang-fr" value="🇫🇷&#xa;Français" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#E1BEE7;strokeColor=#9C27B0;fontSize=10;fontStyle=1;" vertex="1" parent="1">
+          <mxGeometry x="230" y="570" width="70" height="40" as="geometry" />
+        </mxCell>
+        <mxCell id="lang-de2" value="🇩🇪&#xa;Deutsch" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#FFE0B2;strokeColor=#FF9800;fontSize=10;fontStyle=1;" vertex="1" parent="1">
+          <mxGeometry x="315" y="570" width="70" height="40" as="geometry" />
+        </mxCell>
+        <mxCell id="lang-es2" value="🇪🇸&#xa;Español" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#FFCDD2;strokeColor=#f44336;fontSize=10;fontStyle=1;" vertex="1" parent="1">
+          <mxGeometry x="400" y="570" width="70" height="40" as="geometry" />
+        </mxCell>
+        <mxCell id="lang-el2" value="🇬🇷&#xa;Ελληνικά" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#B2EBF2;strokeColor=#00BCD4;fontSize=10;fontStyle=1;" vertex="1" parent="1">
+          <mxGeometry x="485" y="570" width="70" height="40" as="geometry" />
+        </mxCell>
+
+        <mxCell id="lang-info" value="Selezionabili dall'utente • Ordine personalizzabile • Voci maschili e femminili disponibili" style="text;html=1;strokeColor=none;fillColor=none;align=center;fontSize=10;fontColor=#666666;" vertex="1" parent="1">
+          <mxGeometry x="580" y="580" width="390" height="20" as="geometry" />
+        </mxCell>
+
+      </root>
+    </mxGraphModel>
+  </diagram>
+</mxfile>

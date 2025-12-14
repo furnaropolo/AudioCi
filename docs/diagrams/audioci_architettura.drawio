@@ -1,0 +1,229 @@
+<mxfile host="app.diagrams.net" modified="2024-01-15T10:00:00.000Z" agent="Mozilla/5.0" version="22.1.5" etag="seafyradio-arch">
+  <diagram name="Architettura Sistema" id="arch-diagram">
+    <mxGraphModel dx="1434" dy="780" grid="1" gridSize="10" guides="1" tooltips="1" connect="1" arrows="1" fold="1" page="1" pageScale="1" pageWidth="1400" pageHeight="900" math="0" shadow="0">
+      <root>
+        <mxCell id="0" />
+        <mxCell id="1" parent="0" />
+
+        <!-- Titolo -->
+        <mxCell id="title" value="SeafyRadio - Architettura Sistema" style="text;html=1;strokeColor=none;fillColor=none;align=center;verticalAlign=middle;whiteSpace=wrap;rounded=0;fontSize=24;fontStyle=1;fontColor=#1a1a2e;" vertex="1" parent="1">
+          <mxGeometry x="450" y="20" width="500" height="40" as="geometry" />
+        </mxCell>
+
+        <!-- Client Section -->
+        <mxCell id="client-box" value="" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#e8f5e9;strokeColor=#2e7d32;strokeWidth=2;dashed=1;" vertex="1" parent="1">
+          <mxGeometry x="40" y="100" width="320" height="380" as="geometry" />
+        </mxCell>
+        <mxCell id="client-title" value="CLIENT DEVICES" style="text;html=1;strokeColor=none;fillColor=none;align=center;verticalAlign=middle;whiteSpace=wrap;rounded=0;fontSize=14;fontStyle=1;fontColor=#2e7d32;" vertex="1" parent="1">
+          <mxGeometry x="120" y="110" width="160" height="30" as="geometry" />
+        </mxCell>
+
+        <!-- PC Player -->
+        <mxCell id="pc" value="" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#4CAF50;strokeColor=#2e7d32;strokeWidth=2;" vertex="1" parent="1">
+          <mxGeometry x="60" y="160" width="130" height="90" as="geometry" />
+        </mxCell>
+        <mxCell id="pc-icon" value="🖥️" style="text;html=1;strokeColor=none;fillColor=none;align=center;verticalAlign=middle;fontSize=32;" vertex="1" parent="1">
+          <mxGeometry x="90" y="165" width="60" height="40" as="geometry" />
+        </mxCell>
+        <mxCell id="pc-text" value="PC Reception&#xa;PLAYER" style="text;html=1;strokeColor=none;fillColor=none;align=center;verticalAlign=middle;fontColor=#ffffff;fontStyle=1;fontSize=11;" vertex="1" parent="1">
+          <mxGeometry x="65" y="205" width="120" height="40" as="geometry" />
+        </mxCell>
+
+        <!-- Smartphone Controller -->
+        <mxCell id="phone" value="" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#2196F3;strokeColor=#1565c0;strokeWidth=2;" vertex="1" parent="1">
+          <mxGeometry x="210" y="160" width="130" height="90" as="geometry" />
+        </mxCell>
+        <mxCell id="phone-icon" value="📱" style="text;html=1;strokeColor=none;fillColor=none;align=center;verticalAlign=middle;fontSize=32;" vertex="1" parent="1">
+          <mxGeometry x="245" y="165" width="60" height="40" as="geometry" />
+        </mxCell>
+        <mxCell id="phone-text" value="Smartphone&#xa;CONTROLLER" style="text;html=1;strokeColor=none;fillColor=none;align=center;verticalAlign=middle;fontColor=#ffffff;fontStyle=1;fontSize=11;" vertex="1" parent="1">
+          <mxGeometry x="215" y="205" width="120" height="40" as="geometry" />
+        </mxCell>
+
+        <!-- Master -->
+        <mxCell id="master" value="" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#f44336;strokeColor=#c62828;strokeWidth=2;" vertex="1" parent="1">
+          <mxGeometry x="135" y="280" width="130" height="90" as="geometry" />
+        </mxCell>
+        <mxCell id="master-icon" value="🎙️" style="text;html=1;strokeColor=none;fillColor=none;align=center;verticalAlign=middle;fontSize=32;" vertex="1" parent="1">
+          <mxGeometry x="170" y="285" width="60" height="40" as="geometry" />
+        </mxCell>
+        <mxCell id="master-text" value="Comandante&#xa;MASTER" style="text;html=1;strokeColor=none;fillColor=none;align=center;verticalAlign=middle;fontColor=#ffffff;fontStyle=1;fontSize=11;" vertex="1" parent="1">
+          <mxGeometry x="140" y="325" width="120" height="40" as="geometry" />
+        </mxCell>
+
+        <!-- Browser Info -->
+        <mxCell id="browser-info" value="Browser Web&#xa;HTTPS + WebSocket" style="text;html=1;strokeColor=none;fillColor=none;align=center;verticalAlign=middle;fontColor=#666666;fontSize=10;" vertex="1" parent="1">
+          <mxGeometry x="100" y="400" width="200" height="30" as="geometry" />
+        </mxCell>
+
+        <!-- Server Section -->
+        <mxCell id="server-box" value="" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#e3f2fd;strokeColor=#1565c0;strokeWidth=2;dashed=1;" vertex="1" parent="1">
+          <mxGeometry x="480" y="100" width="450" height="500" as="geometry" />
+        </mxCell>
+        <mxCell id="server-title" value="SEAFYRADIO SERVER (192.168.1.42:8000)" style="text;html=1;strokeColor=none;fillColor=none;align=center;verticalAlign=middle;whiteSpace=wrap;rounded=0;fontSize=14;fontStyle=1;fontColor=#1565c0;" vertex="1" parent="1">
+          <mxGeometry x="530" y="110" width="350" height="30" as="geometry" />
+        </mxCell>
+
+        <!-- FastAPI Backend -->
+        <mxCell id="fastapi-box" value="" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#1976D2;strokeColor=#0d47a1;strokeWidth=2;" vertex="1" parent="1">
+          <mxGeometry x="500" y="150" width="200" height="200" as="geometry" />
+        </mxCell>
+        <mxCell id="fastapi-title" value="FastAPI Backend" style="text;html=1;strokeColor=none;fillColor=none;align=center;verticalAlign=middle;fontColor=#ffffff;fontStyle=1;fontSize=13;" vertex="1" parent="1">
+          <mxGeometry x="530" y="155" width="140" height="25" as="geometry" />
+        </mxCell>
+
+        <!-- REST API -->
+        <mxCell id="rest" value="REST API" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#42A5F5;strokeColor=#1976D2;fontColor=#ffffff;fontStyle=1;" vertex="1" parent="1">
+          <mxGeometry x="515" y="190" width="80" height="35" as="geometry" />
+        </mxCell>
+
+        <!-- WebSocket -->
+        <mxCell id="websocket" value="WebSocket&#xa;Server" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#42A5F5;strokeColor=#1976D2;fontColor=#ffffff;fontStyle=1;" vertex="1" parent="1">
+          <mxGeometry x="605" y="190" width="80" height="35" as="geometry" />
+        </mxCell>
+
+        <!-- TTS Engine -->
+        <mxCell id="tts" value="TTS Engine&#xa;(edge-tts)" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#7E57C2;strokeColor=#512da8;fontColor=#ffffff;fontStyle=1;" vertex="1" parent="1">
+          <mxGeometry x="515" y="240" width="80" height="45" as="geometry" />
+        </mxCell>
+
+        <!-- Translator -->
+        <mxCell id="translator" value="Translator&#xa;(deep-translator)" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#7E57C2;strokeColor=#512da8;fontColor=#ffffff;fontStyle=1;" vertex="1" parent="1">
+          <mxGeometry x="605" y="240" width="80" height="45" as="geometry" />
+        </mxCell>
+
+        <!-- Auth -->
+        <mxCell id="auth" value="JWT Auth" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#FF7043;strokeColor=#E64A19;fontColor=#ffffff;fontStyle=1;" vertex="1" parent="1">
+          <mxGeometry x="560" y="300" width="80" height="35" as="geometry" />
+        </mxCell>
+
+        <!-- Storage Section -->
+        <mxCell id="storage-box" value="" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#FFF3E0;strokeColor=#E65100;strokeWidth=2;" vertex="1" parent="1">
+          <mxGeometry x="720" y="150" width="190" height="200" as="geometry" />
+        </mxCell>
+        <mxCell id="storage-title" value="Storage" style="text;html=1;strokeColor=none;fillColor=none;align=center;verticalAlign=middle;fontColor=#E65100;fontStyle=1;fontSize=13;" vertex="1" parent="1">
+          <mxGeometry x="780" y="155" width="70" height="25" as="geometry" />
+        </mxCell>
+
+        <!-- Database -->
+        <mxCell id="db" value="SQLite&#xa;seafyradio.db" style="shape=cylinder3;whiteSpace=wrap;html=1;boundedLbl=1;backgroundOutline=1;size=10;fillColor=#FFB74D;strokeColor=#E65100;fontStyle=1;" vertex="1" parent="1">
+          <mxGeometry x="745" y="185" width="80" height="60" as="geometry" />
+        </mxCell>
+
+        <!-- Announcements Folder -->
+        <mxCell id="ann-folder" value="📁 /audio/&#xa;announcements" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#FFCC80;strokeColor=#E65100;fontStyle=1;fontSize=10;" vertex="1" parent="1">
+          <mxGeometry x="735" y="260" width="90" height="40" as="geometry" />
+        </mxCell>
+
+        <!-- Music Folder -->
+        <mxCell id="music-folder" value="📁 /audio/&#xa;music" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#FFCC80;strokeColor=#E65100;fontStyle=1;fontSize=10;" vertex="1" parent="1">
+          <mxGeometry x="735" y="305" width="90" height="40" as="geometry" />
+        </mxCell>
+
+        <!-- SSL Cert -->
+        <mxCell id="ssl" value="🔒 SSL/TLS&#xa;Certificates" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#81C784;strokeColor=#388E3C;fontStyle=1;fontSize=10;" vertex="1" parent="1">
+          <mxGeometry x="835" y="220" width="70" height="45" as="geometry" />
+        </mxCell>
+
+        <!-- Frontend -->
+        <mxCell id="frontend" value="Frontend SPA&#xa;(HTML/JS/CSS)" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#EC407A;strokeColor=#C2185B;fontColor=#ffffff;fontStyle=1;" vertex="1" parent="1">
+          <mxGeometry x="500" y="380" width="130" height="50" as="geometry" />
+        </mxCell>
+
+        <!-- Uvicorn -->
+        <mxCell id="uvicorn" value="Uvicorn ASGI Server&#xa;Port 8000 (HTTPS)" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#26A69A;strokeColor=#00796B;fontColor=#ffffff;fontStyle=1;" vertex="1" parent="1">
+          <mxGeometry x="500" y="450" width="200" height="45" as="geometry" />
+        </mxCell>
+
+        <!-- Systemd -->
+        <mxCell id="systemd" value="systemd service&#xa;seafyradio.service" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#78909C;strokeColor=#455A64;fontColor=#ffffff;fontStyle=1;" vertex="1" parent="1">
+          <mxGeometry x="500" y="510" width="200" height="40" as="geometry" />
+        </mxCell>
+
+        <!-- Connection Arrows -->
+        <!-- PC to Server -->
+        <mxCell id="arrow1" value="HTTPS/WSS" style="endArrow=classic;startArrow=classic;html=1;strokeWidth=2;strokeColor=#4CAF50;fontColor=#4CAF50;fontStyle=1;" edge="1" parent="1">
+          <mxGeometry x="0.1" y="10" relative="1" as="geometry">
+            <mxPoint x="190" y="200" as="sourcePoint" />
+            <mxPoint x="500" y="200" as="targetPoint" />
+          </mxGeometry>
+        </mxCell>
+
+        <!-- Phone to Server -->
+        <mxCell id="arrow2" value="HTTPS/WSS" style="endArrow=classic;startArrow=classic;html=1;strokeWidth=2;strokeColor=#2196F3;fontColor=#2196F3;fontStyle=1;" edge="1" parent="1">
+          <mxGeometry x="0.1" y="10" relative="1" as="geometry">
+            <mxPoint x="340" y="220" as="sourcePoint" />
+            <mxPoint x="500" y="220" as="targetPoint" />
+          </mxGeometry>
+        </mxCell>
+
+        <!-- Master to Server -->
+        <mxCell id="arrow3" value="WSS + Audio Stream" style="endArrow=classic;startArrow=classic;html=1;strokeWidth=2;strokeColor=#f44336;fontColor=#f44336;fontStyle=1;" edge="1" parent="1">
+          <mxGeometry x="0.1" y="10" relative="1" as="geometry">
+            <mxPoint x="265" y="320" as="sourcePoint" />
+            <mxPoint x="500" y="280" as="targetPoint" />
+          </mxGeometry>
+        </mxCell>
+
+        <!-- Internal connections -->
+        <mxCell id="int1" style="endArrow=classic;startArrow=classic;html=1;strokeWidth=1;strokeColor=#666666;dashed=1;" edge="1" parent="1">
+          <mxGeometry relative="1" as="geometry">
+            <mxPoint x="700" y="240" as="sourcePoint" />
+            <mxPoint x="720" y="240" as="targetPoint" />
+          </mxGeometry>
+        </mxCell>
+
+        <!-- Legend -->
+        <mxCell id="legend-box" value="" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#f5f5f5;strokeColor=#666666;strokeWidth=1;" vertex="1" parent="1">
+          <mxGeometry x="1000" y="100" width="180" height="200" as="geometry" />
+        </mxCell>
+        <mxCell id="legend-title" value="LEGENDA" style="text;html=1;strokeColor=none;fillColor=none;align=center;verticalAlign=middle;fontStyle=1;fontSize=12;" vertex="1" parent="1">
+          <mxGeometry x="1050" y="105" width="80" height="20" as="geometry" />
+        </mxCell>
+
+        <mxCell id="leg1" value="" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#4CAF50;strokeColor=#2e7d32;" vertex="1" parent="1">
+          <mxGeometry x="1015" y="135" width="20" height="15" as="geometry" />
+        </mxCell>
+        <mxCell id="leg1t" value="Player Mode" style="text;html=1;strokeColor=none;fillColor=none;align=left;fontSize=10;" vertex="1" parent="1">
+          <mxGeometry x="1045" y="133" width="80" height="20" as="geometry" />
+        </mxCell>
+
+        <mxCell id="leg2" value="" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#2196F3;strokeColor=#1565c0;" vertex="1" parent="1">
+          <mxGeometry x="1015" y="160" width="20" height="15" as="geometry" />
+        </mxCell>
+        <mxCell id="leg2t" value="Controller Mode" style="text;html=1;strokeColor=none;fillColor=none;align=left;fontSize=10;" vertex="1" parent="1">
+          <mxGeometry x="1045" y="158" width="80" height="20" as="geometry" />
+        </mxCell>
+
+        <mxCell id="leg3" value="" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#f44336;strokeColor=#c62828;" vertex="1" parent="1">
+          <mxGeometry x="1015" y="185" width="20" height="15" as="geometry" />
+        </mxCell>
+        <mxCell id="leg3t" value="Master Mode" style="text;html=1;strokeColor=none;fillColor=none;align=left;fontSize=10;" vertex="1" parent="1">
+          <mxGeometry x="1045" y="183" width="80" height="20" as="geometry" />
+        </mxCell>
+
+        <mxCell id="leg4" value="" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#7E57C2;strokeColor=#512da8;" vertex="1" parent="1">
+          <mxGeometry x="1015" y="210" width="20" height="15" as="geometry" />
+        </mxCell>
+        <mxCell id="leg4t" value="AI Services" style="text;html=1;strokeColor=none;fillColor=none;align=left;fontSize=10;" vertex="1" parent="1">
+          <mxGeometry x="1045" y="208" width="80" height="20" as="geometry" />
+        </mxCell>
+
+        <mxCell id="leg5" value="" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#FFB74D;strokeColor=#E65100;" vertex="1" parent="1">
+          <mxGeometry x="1015" y="235" width="20" height="15" as="geometry" />
+        </mxCell>
+        <mxCell id="leg5t" value="Storage" style="text;html=1;strokeColor=none;fillColor=none;align=left;fontSize=10;" vertex="1" parent="1">
+          <mxGeometry x="1045" y="233" width="80" height="20" as="geometry" />
+        </mxCell>
+
+        <mxCell id="leg6" value="" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#EC407A;strokeColor=#C2185B;" vertex="1" parent="1">
+          <mxGeometry x="1015" y="260" width="20" height="15" as="geometry" />
+        </mxCell>
+        <mxCell id="leg6t" value="Frontend" style="text;html=1;strokeColor=none;fillColor=none;align=left;fontSize=10;" vertex="1" parent="1">
+          <mxGeometry x="1045" y="258" width="80" height="20" as="geometry" />
+        </mxCell>
+
+      </root>
+    </mxGraphModel>
+  </diagram>
+</mxfile>

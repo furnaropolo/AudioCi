@@ -1,0 +1,244 @@
+<mxfile host="app.diagrams.net" modified="2024-01-15T10:00:00.000Z" agent="Mozilla/5.0" version="22.1.5" etag="seafyradio-ws">
+  <diagram name="Flusso WebSocket" id="ws-diagram">
+    <mxGraphModel dx="1434" dy="780" grid="1" gridSize="10" guides="1" tooltips="1" connect="1" arrows="1" fold="1" page="1" pageScale="1" pageWidth="1400" pageHeight="900" math="0" shadow="0">
+      <root>
+        <mxCell id="0" />
+        <mxCell id="1" parent="0" />
+
+        <!-- Titolo -->
+        <mxCell id="title" value="SeafyRadio - Comunicazione WebSocket" style="text;html=1;strokeColor=none;fillColor=none;align=center;verticalAlign=middle;whiteSpace=wrap;rounded=0;fontSize=24;fontStyle=1;fontColor=#1a1a2e;" vertex="1" parent="1">
+          <mxGeometry x="400" y="20" width="500" height="40" as="geometry" />
+        </mxCell>
+
+        <!-- Actors -->
+        <mxCell id="controller" value="📱 CONTROLLER" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#2196F3;strokeColor=#1565c0;fontColor=#ffffff;fontStyle=1;fontSize=14;" vertex="1" parent="1">
+          <mxGeometry x="80" y="80" width="140" height="50" as="geometry" />
+        </mxCell>
+
+        <mxCell id="server" value="🖥️ SERVER" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#4CAF50;strokeColor=#2e7d32;fontColor=#ffffff;fontStyle=1;fontSize=14;" vertex="1" parent="1">
+          <mxGeometry x="380" y="80" width="140" height="50" as="geometry" />
+        </mxCell>
+
+        <mxCell id="player" value="🔊 PLAYER" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#FF9800;strokeColor=#EF6C00;fontColor=#ffffff;fontStyle=1;fontSize=14;" vertex="1" parent="1">
+          <mxGeometry x="680" y="80" width="140" height="50" as="geometry" />
+        </mxCell>
+
+        <mxCell id="master" value="🎙️ MASTER" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#f44336;strokeColor=#c62828;fontColor=#ffffff;fontStyle=1;fontSize=14;" vertex="1" parent="1">
+          <mxGeometry x="980" y="80" width="140" height="50" as="geometry" />
+        </mxCell>
+
+        <!-- Vertical Lines -->
+        <mxCell id="line1" style="endArrow=none;html=1;strokeWidth=2;strokeColor=#2196F3;dashed=1;" edge="1" parent="1">
+          <mxGeometry relative="1" as="geometry">
+            <mxPoint x="150" y="130" as="sourcePoint" />
+            <mxPoint x="150" y="850" as="targetPoint" />
+          </mxGeometry>
+        </mxCell>
+        <mxCell id="line2" style="endArrow=none;html=1;strokeWidth=2;strokeColor=#4CAF50;dashed=1;" edge="1" parent="1">
+          <mxGeometry relative="1" as="geometry">
+            <mxPoint x="450" y="130" as="sourcePoint" />
+            <mxPoint x="450" y="850" as="targetPoint" />
+          </mxGeometry>
+        </mxCell>
+        <mxCell id="line3" style="endArrow=none;html=1;strokeWidth=2;strokeColor=#FF9800;dashed=1;" edge="1" parent="1">
+          <mxGeometry relative="1" as="geometry">
+            <mxPoint x="750" y="130" as="sourcePoint" />
+            <mxPoint x="750" y="850" as="targetPoint" />
+          </mxGeometry>
+        </mxCell>
+        <mxCell id="line4" style="endArrow=none;html=1;strokeWidth=2;strokeColor=#f44336;dashed=1;" edge="1" parent="1">
+          <mxGeometry relative="1" as="geometry">
+            <mxPoint x="1050" y="130" as="sourcePoint" />
+            <mxPoint x="1050" y="850" as="targetPoint" />
+          </mxGeometry>
+        </mxCell>
+
+        <!-- Section 1: Connection -->
+        <mxCell id="sec1" value="CONNESSIONE" style="text;html=1;strokeColor=none;fillColor=#E3F2FD;align=center;verticalAlign=middle;fontStyle=1;fontSize=12;rounded=1;" vertex="1" parent="1">
+          <mxGeometry x="20" y="150" width="120" height="25" as="geometry" />
+        </mxCell>
+
+        <mxCell id="conn1" value="Connect /ws/controller" style="endArrow=classic;html=1;strokeWidth=2;strokeColor=#2196F3;" edge="1" parent="1">
+          <mxGeometry relative="1" as="geometry">
+            <mxPoint x="150" y="180" as="sourcePoint" />
+            <mxPoint x="450" y="180" as="targetPoint" />
+          </mxGeometry>
+        </mxCell>
+
+        <mxCell id="conn2" value="Connect /ws/player" style="endArrow=classic;html=1;strokeWidth=2;strokeColor=#FF9800;" edge="1" parent="1">
+          <mxGeometry relative="1" as="geometry">
+            <mxPoint x="750" y="200" as="sourcePoint" />
+            <mxPoint x="450" y="200" as="targetPoint" />
+          </mxGeometry>
+        </mxCell>
+
+        <mxCell id="conn3" value="OK" style="endArrow=classic;html=1;strokeWidth=2;strokeColor=#4CAF50;dashed=1;" edge="1" parent="1">
+          <mxGeometry relative="1" as="geometry">
+            <mxPoint x="450" y="220" as="sourcePoint" />
+            <mxPoint x="150" y="220" as="targetPoint" />
+          </mxGeometry>
+        </mxCell>
+
+        <mxCell id="conn4" value="OK" style="endArrow=classic;html=1;strokeWidth=2;strokeColor=#4CAF50;dashed=1;" edge="1" parent="1">
+          <mxGeometry relative="1" as="geometry">
+            <mxPoint x="450" y="240" as="sourcePoint" />
+            <mxPoint x="750" y="240" as="targetPoint" />
+          </mxGeometry>
+        </mxCell>
+
+        <!-- Section 2: Play Announcement -->
+        <mxCell id="sec2" value="RIPRODUZIONE ANNUNCIO" style="text;html=1;strokeColor=none;fillColor=#FFF3E0;align=center;verticalAlign=middle;fontStyle=1;fontSize=12;rounded=1;" vertex="1" parent="1">
+          <mxGeometry x="20" y="270" width="120" height="35" as="geometry" />
+        </mxCell>
+
+        <mxCell id="play1" value="{action: &quot;play_announcement&quot;,&#xa; id: 1, files: [&quot;file.mp3&quot;]}" style="endArrow=classic;html=1;strokeWidth=2;strokeColor=#2196F3;" edge="1" parent="1">
+          <mxGeometry x="0.2" relative="1" as="geometry">
+            <mxPoint x="150" y="310" as="sourcePoint" />
+            <mxPoint x="450" y="310" as="targetPoint" />
+          </mxGeometry>
+        </mxCell>
+
+        <mxCell id="play2" value="{type: &quot;play&quot;, content: &quot;announcement&quot;,&#xa; files: [&quot;file.mp3&quot;]}" style="endArrow=classic;html=1;strokeWidth=2;strokeColor=#4CAF50;" edge="1" parent="1">
+          <mxGeometry x="0.2" relative="1" as="geometry">
+            <mxPoint x="450" y="350" as="sourcePoint" />
+            <mxPoint x="750" y="350" as="targetPoint" />
+          </mxGeometry>
+        </mxCell>
+
+        <mxCell id="play3" value="▶️ Play audio queue" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#FFE0B2;strokeColor=#FF9800;fontSize=10;" vertex="1" parent="1">
+          <mxGeometry x="690" y="370" width="120" height="30" as="geometry" />
+        </mxCell>
+
+        <!-- Section 3: Play Playlist -->
+        <mxCell id="sec3" value="RIPRODUZIONE PLAYLIST" style="text;html=1;strokeColor=none;fillColor=#FCE4EC;align=center;verticalAlign=middle;fontStyle=1;fontSize=12;rounded=1;" vertex="1" parent="1">
+          <mxGeometry x="20" y="420" width="120" height="35" as="geometry" />
+        </mxCell>
+
+        <mxCell id="playlist1" value="{action: &quot;play_playlist&quot;,&#xa; tracks: [...], loop: true}" style="endArrow=classic;html=1;strokeWidth=2;strokeColor=#2196F3;" edge="1" parent="1">
+          <mxGeometry x="0.2" relative="1" as="geometry">
+            <mxPoint x="150" y="460" as="sourcePoint" />
+            <mxPoint x="450" y="460" as="targetPoint" />
+          </mxGeometry>
+        </mxCell>
+
+        <mxCell id="playlist2" value="{type: &quot;play_playlist&quot;,&#xa; tracks: [...], loop: true}" style="endArrow=classic;html=1;strokeWidth=2;strokeColor=#4CAF50;" edge="1" parent="1">
+          <mxGeometry x="0.2" relative="1" as="geometry">
+            <mxPoint x="450" y="500" as="sourcePoint" />
+            <mxPoint x="750" y="500" as="targetPoint" />
+          </mxGeometry>
+        </mxCell>
+
+        <mxCell id="playlist3" value="🎵 Play music loop" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#F8BBD9;strokeColor=#C2185B;fontSize=10;" vertex="1" parent="1">
+          <mxGeometry x="690" y="520" width="120" height="30" as="geometry" />
+        </mxCell>
+
+        <!-- Section 4: Music Controls -->
+        <mxCell id="sec4" value="CONTROLLI MUSICA" style="text;html=1;strokeColor=none;fillColor=#E8F5E9;align=center;verticalAlign=middle;fontStyle=1;fontSize=12;rounded=1;" vertex="1" parent="1">
+          <mxGeometry x="20" y="570" width="120" height="35" as="geometry" />
+        </mxCell>
+
+        <mxCell id="ctrl1" value="{action: &quot;music_next&quot;}" style="endArrow=classic;html=1;strokeWidth=2;strokeColor=#2196F3;" edge="1" parent="1">
+          <mxGeometry relative="1" as="geometry">
+            <mxPoint x="150" y="610" as="sourcePoint" />
+            <mxPoint x="450" y="610" as="targetPoint" />
+          </mxGeometry>
+        </mxCell>
+
+        <mxCell id="ctrl2" value="{type: &quot;music_next&quot;}" style="endArrow=classic;html=1;strokeWidth=2;strokeColor=#4CAF50;" edge="1" parent="1">
+          <mxGeometry relative="1" as="geometry">
+            <mxPoint x="450" y="630" as="sourcePoint" />
+            <mxPoint x="750" y="630" as="targetPoint" />
+          </mxGeometry>
+        </mxCell>
+
+        <mxCell id="ctrl3" value="⏭️ Next track" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#C8E6C9;strokeColor=#388E3C;fontSize=10;" vertex="1" parent="1">
+          <mxGeometry x="690" y="645" width="120" height="25" as="geometry" />
+        </mxCell>
+
+        <!-- Section 5: Master Emergency -->
+        <mxCell id="sec5" value="ANNUNCIO EMERGENZA" style="text;html=1;strokeColor=none;fillColor=#FFEBEE;align=center;verticalAlign=middle;fontStyle=1;fontSize=12;rounded=1;" vertex="1" parent="1">
+          <mxGeometry x="20" y="690" width="120" height="35" as="geometry" />
+        </mxCell>
+
+        <mxCell id="master1" value="{action: &quot;start_announcement&quot;,&#xa; username: &quot;Comandante&quot;}" style="endArrow=classic;html=1;strokeWidth=2;strokeColor=#f44336;" edge="1" parent="1">
+          <mxGeometry x="0.2" relative="1" as="geometry">
+            <mxPoint x="1050" y="730" as="sourcePoint" />
+            <mxPoint x="450" y="730" as="targetPoint" />
+          </mxGeometry>
+        </mxCell>
+
+        <mxCell id="master2" value="{type: &quot;master_start&quot;}" style="endArrow=classic;html=1;strokeWidth=2;strokeColor=#4CAF50;" edge="1" parent="1">
+          <mxGeometry relative="1" as="geometry">
+            <mxPoint x="450" y="755" as="sourcePoint" />
+            <mxPoint x="150" y="755" as="targetPoint" />
+          </mxGeometry>
+        </mxCell>
+
+        <mxCell id="master3" value="{type: &quot;master_start&quot;}" style="endArrow=classic;html=1;strokeWidth=2;strokeColor=#4CAF50;" edge="1" parent="1">
+          <mxGeometry relative="1" as="geometry">
+            <mxPoint x="450" y="775" as="sourcePoint" />
+            <mxPoint x="750" y="775" as="targetPoint" />
+          </mxGeometry>
+        </mxCell>
+
+        <mxCell id="master4" value="🔴 Audio stream (binary)" style="endArrow=classic;html=1;strokeWidth=3;strokeColor=#f44336;" edge="1" parent="1">
+          <mxGeometry relative="1" as="geometry">
+            <mxPoint x="1050" y="805" as="sourcePoint" />
+            <mxPoint x="450" y="805" as="targetPoint" />
+          </mxGeometry>
+        </mxCell>
+
+        <mxCell id="master5" value="🔴 Audio stream" style="endArrow=classic;html=1;strokeWidth=3;strokeColor=#f44336;" edge="1" parent="1">
+          <mxGeometry relative="1" as="geometry">
+            <mxPoint x="450" y="825" as="sourcePoint" />
+            <mxPoint x="750" y="825" as="targetPoint" />
+          </mxGeometry>
+        </mxCell>
+
+        <mxCell id="master-box" value="📢 EMERGENZA&#xa;Override audio" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#FFCDD2;strokeColor=#f44336;fontSize=10;fontStyle=1;" vertex="1" parent="1">
+          <mxGeometry x="690" y="790" width="120" height="40" as="geometry" />
+        </mxCell>
+
+        <!-- Legend Box -->
+        <mxCell id="legend" value="" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#FAFAFA;strokeColor=#9E9E9E;" vertex="1" parent="1">
+          <mxGeometry x="1120" y="150" width="180" height="200" as="geometry" />
+        </mxCell>
+        <mxCell id="legend-title" value="LEGENDA MESSAGGI" style="text;html=1;strokeColor=none;fillColor=none;align=center;verticalAlign=middle;fontStyle=1;fontSize=11;" vertex="1" parent="1">
+          <mxGeometry x="1140" y="155" width="140" height="20" as="geometry" />
+        </mxCell>
+
+        <mxCell id="leg1" value="─── Request" style="text;html=1;strokeColor=none;fillColor=none;align=left;fontSize=10;" vertex="1" parent="1">
+          <mxGeometry x="1135" y="185" width="100" height="20" as="geometry" />
+        </mxCell>
+        <mxCell id="leg2" value="- - - Response" style="text;html=1;strokeColor=none;fillColor=none;align=left;fontSize=10;" vertex="1" parent="1">
+          <mxGeometry x="1135" y="210" width="100" height="20" as="geometry" />
+        </mxCell>
+        <mxCell id="leg3" value="━━ Audio Binary" style="text;html=1;strokeColor=none;fillColor=none;align=left;fontSize=10;" vertex="1" parent="1">
+          <mxGeometry x="1135" y="235" width="100" height="20" as="geometry" />
+        </mxCell>
+
+        <mxCell id="leg4" value="" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#2196F3;" vertex="1" parent="1">
+          <mxGeometry x="1135" y="265" width="15" height="15" as="geometry" />
+        </mxCell>
+        <mxCell id="leg4t" value="Controller" style="text;html=1;strokeColor=none;fillColor=none;align=left;fontSize=10;" vertex="1" parent="1">
+          <mxGeometry x="1155" y="263" width="60" height="20" as="geometry" />
+        </mxCell>
+
+        <mxCell id="leg5" value="" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#FF9800;" vertex="1" parent="1">
+          <mxGeometry x="1135" y="290" width="15" height="15" as="geometry" />
+        </mxCell>
+        <mxCell id="leg5t" value="Player" style="text;html=1;strokeColor=none;fillColor=none;align=left;fontSize=10;" vertex="1" parent="1">
+          <mxGeometry x="1155" y="288" width="60" height="20" as="geometry" />
+        </mxCell>
+
+        <mxCell id="leg6" value="" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#f44336;" vertex="1" parent="1">
+          <mxGeometry x="1135" y="315" width="15" height="15" as="geometry" />
+        </mxCell>
+        <mxCell id="leg6t" value="Master" style="text;html=1;strokeColor=none;fillColor=none;align=left;fontSize=10;" vertex="1" parent="1">
+          <mxGeometry x="1155" y="313" width="60" height="20" as="geometry" />
+        </mxCell>
+
+      </root>
+    </mxGraphModel>
+  </diagram>
+</mxfile>

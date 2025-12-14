@@ -1,0 +1,3057 @@
+<!DOCTYPE html>
+<html lang="it">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>AudioCi - Sistema Annunci</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+            background: linear-gradient(135deg, #1a1a2e 0%, #16213e 100%);
+            min-height: 100vh;
+            color: #fff;
+        }
+
+        .login-container {
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            min-height: 100vh;
+        }
+
+        .login-box {
+            background: rgba(255,255,255,0.1);
+            padding: 40px;
+            border-radius: 20px;
+            backdrop-filter: blur(10px);
+            width: 100%;
+            max-width: 400px;
+        }
+
+        .login-box h1 {
+            text-align: center;
+            margin-bottom: 30px;
+            font-size: 2em;
+        }
+
+        .login-box input {
+            width: 100%;
+            padding: 15px;
+            margin-bottom: 15px;
+            border: none;
+            border-radius: 10px;
+            background: rgba(255,255,255,0.2);
+            color: #fff;
+            font-size: 16px;
+        }
+
+        .login-box input::placeholder {
+            color: rgba(255,255,255,0.6);
+        }
+
+        .login-box button {
+            width: 100%;
+            padding: 15px;
+            border: none;
+            border-radius: 10px;
+            background: #3B82F6;
+            color: #fff;
+            font-size: 18px;
+            cursor: pointer;
+            transition: background 0.3s;
+        }
+
+        .login-box button:hover {
+            background: #2563EB;
+        }
+
+        .error-msg {
+            color: #EF4444;
+            text-align: center;
+            margin-bottom: 15px;
+        }
+
+        .header {
+            background: rgba(0,0,0,0.3);
+            padding: 15px 30px;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+
+        .header h1 {
+            font-size: 1.5em;
+        }
+
+        .header-right {
+            display: flex;
+            align-items: center;
+            gap: 20px;
+        }
+
+        .status-badge {
+            padding: 8px 15px;
+            border-radius: 20px;
+            font-size: 0.9em;
+        }
+
+        .status-player { background: #10B981; }
+        .status-controller { background: #3B82F6; }
+
+        .user-info {
+            display: flex;
+            align-items: center;
+            gap: 10px;
+        }
+
+        .logout-btn {
+            padding: 8px 15px;
+            border: none;
+            border-radius: 8px;
+            background: #EF4444;
+            color: #fff;
+            cursor: pointer;
+        }
+
+        .mode-switch-btn {
+            padding: 8px 15px;
+            border: none;
+            border-radius: 8px;
+            background: #8B5CF6;
+            color: #fff;
+            cursor: pointer;
+        }
+
+        .mode-switch-btn:hover { background: #7C3AED; }
+
+        .nav-tabs {
+            display: flex;
+            background: rgba(0,0,0,0.2);
+            padding: 10px 30px;
+            gap: 10px;
+        }
+
+        .nav-tab {
+            padding: 10px 20px;
+            border: none;
+            border-radius: 8px;
+            background: transparent;
+            color: rgba(255,255,255,0.7);
+            cursor: pointer;
+            font-size: 1em;
+        }
+
+        .nav-tab.active {
+            background: #3B82F6;
+            color: #fff;
+        }
+
+        .main-content {
+            padding: 30px;
+            padding-bottom: 120px;
+        }
+
+        .breadcrumb {
+            margin-bottom: 20px;
+            display: flex;
+            align-items: center;
+            gap: 10px;
+        }
+
+        .breadcrumb-btn {
+            padding: 8px 15px;
+            border: none;
+            border-radius: 8px;
+            background: rgba(255,255,255,0.1);
+            color: #fff;
+            cursor: pointer;
+        }
+
+        .breadcrumb-btn:hover { background: rgba(255,255,255,0.2); }
+
+        .button-grid {
+            display: grid;
+            gap: 15px;
+            padding: 10px;
+        }
+
+        .grid-2 { grid-template-columns: repeat(2, 1fr); }
+        .grid-3 { grid-template-columns: repeat(3, 1fr); }
+        .grid-4 { grid-template-columns: repeat(4, 1fr); }
+
+        .sound-btn {
+            aspect-ratio: 1;
+            border: none;
+            border-radius: 15px;
+            font-size: 1.2em;
+            font-weight: bold;
+            cursor: pointer;
+            transition: transform 0.1s, box-shadow 0.2s;
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            align-items: center;
+            padding: 20px;
+            text-align: center;
+            color: #fff;
+            text-shadow: 1px 1px 2px rgba(0,0,0,0.3);
+        }
+
+        .sound-btn:hover {
+            transform: scale(1.02);
+            box-shadow: 0 10px 30px rgba(0,0,0,0.3);
+        }
+
+        .sound-btn:active { transform: scale(0.98); }
+
+        .sound-btn.playing { animation: pulse 1s infinite; }
+
+        @keyframes pulse {
+            0%, 100% { box-shadow: 0 0 0 0 rgba(255,255,255,0.4); }
+            50% { box-shadow: 0 0 0 15px rgba(255,255,255,0); }
+        }
+
+        .sound-btn .icon {
+            font-size: 2em;
+            margin-bottom: 10px;
+        }
+
+        .player-bar {
+            position: fixed;
+            bottom: 0;
+            left: 0;
+            right: 0;
+            background: rgba(0,0,0,0.9);
+            padding: 15px 30px;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+
+        .now-playing {
+            display: flex;
+            align-items: center;
+            gap: 15px;
+        }
+
+        .now-playing .status-icon {
+            width: 50px;
+            height: 50px;
+            border-radius: 10px;
+            background: #10B981;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            font-size: 1.5em;
+        }
+
+        .now-playing .status-icon.stopped { background: #6B7280; }
+
+        .player-controls {
+            display: flex;
+            gap: 10px;
+        }
+
+        .player-controls button {
+            width: 50px;
+            height: 50px;
+            border: none;
+            border-radius: 50%;
+            background: #3B82F6;
+            color: #fff;
+            font-size: 1.2em;
+            cursor: pointer;
+        }
+
+        .progress-section {
+            flex: 1;
+            margin: 0 30px;
+            max-width: 500px;
+        }
+
+        .progress-bar-container {
+            width: 100%;
+            height: 8px;
+            background: rgba(255,255,255,0.2);
+            border-radius: 4px;
+            overflow: hidden;
+            cursor: pointer;
+        }
+
+        .progress-bar {
+            height: 100%;
+            background: linear-gradient(90deg, #10B981, #3B82F6);
+            border-radius: 4px;
+            width: 0%;
+            transition: width 0.1s linear;
+        }
+
+        .progress-time {
+            display: flex;
+            justify-content: space-between;
+            font-size: 0.8em;
+            color: #94a3b8;
+            margin-top: 5px;
+        }
+
+        .player-controls button.stop-btn { background: #EF4444; }
+
+        .admin-section {
+            background: rgba(255,255,255,0.05);
+            border-radius: 15px;
+            padding: 20px;
+            margin-bottom: 20px;
+        }
+
+        .admin-section h2 {
+            margin-bottom: 15px;
+            font-size: 1.3em;
+        }
+
+        .item-list { margin-top: 15px; }
+
+        .item-row {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding: 10px 15px;
+            background: rgba(255,255,255,0.05);
+            border-radius: 8px;
+            margin-bottom: 8px;
+            flex-wrap: wrap;
+            gap: 10px;
+        }
+
+        .item-row button {
+            padding: 5px 10px;
+            border: none;
+            border-radius: 5px;
+            cursor: pointer;
+            margin-left: 5px;
+        }
+
+        .btn-edit { background: #F59E0B; color: #fff; }
+        .btn-delete { background: #EF4444; color: #fff; }
+        .btn-upload { background: #3B82F6; color: #fff; }
+        .btn-add { background: #10B981; color: #fff; font-size: 1.1em; padding: 15px 30px !important; }
+
+        .modal-overlay {
+            position: fixed;
+            top: 0;
+            left: 0;
+            right: 0;
+            bottom: 0;
+            background: rgba(0,0,0,0.7);
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            z-index: 1000;
+            overflow-y: auto;
+            padding: 20px;
+        }
+
+        .modal {
+            background: #1e293b;
+            border-radius: 20px;
+            padding: 30px;
+            width: 100%;
+            max-width: 500px;
+            box-shadow: 0 20px 60px rgba(0,0,0,0.5);
+            max-height: 90vh;
+            overflow-y: auto;
+        }
+
+        .modal h2 {
+            margin-bottom: 25px;
+            text-align: center;
+        }
+
+        .modal-field {
+            margin-bottom: 20px;
+        }
+
+        .modal-field label {
+            display: block;
+            margin-bottom: 8px;
+            font-size: 0.9em;
+            color: #94a3b8;
+        }
+
+        .modal-field input,
+        .modal-field select {
+            width: 100%;
+            padding: 12px 15px;
+            border: none;
+            border-radius: 10px;
+            background: rgba(255,255,255,0.1);
+            color: #fff;
+            font-size: 1em;
+        }
+
+        .modal-field input[type="color"] {
+            height: 50px;
+            padding: 5px;
+            cursor: pointer;
+        }
+
+        .modal-buttons {
+            display: flex;
+            gap: 10px;
+            margin-top: 25px;
+        }
+
+        .modal-buttons button {
+            flex: 1;
+            padding: 15px;
+            border: none;
+            border-radius: 10px;
+            font-size: 1em;
+            cursor: pointer;
+        }
+
+        .modal-btn-cancel { background: #6b7280; color: #fff; }
+        .modal-btn-save { background: #10B981; color: #fff; }
+        .modal-btn-save:hover { background: #059669; }
+
+        .hidden { display: none !important; }
+
+        .mode-selector {
+            text-align: center;
+            padding: 50px;
+        }
+
+        .mode-selector h2 { margin-bottom: 30px; }
+
+        .mode-buttons {
+            display: flex;
+            justify-content: center;
+            gap: 30px;
+            flex-wrap: wrap;
+        }
+
+        .mode-btn {
+            padding: 40px 60px;
+            border: none;
+            border-radius: 20px;
+            font-size: 1.5em;
+            cursor: pointer;
+            transition: transform 0.2s;
+        }
+
+        .mode-btn:hover { transform: scale(1.05); }
+        .mode-btn.player { background: linear-gradient(135deg, #10B981, #059669); color: #fff; }
+        .mode-btn.controller { background: linear-gradient(135deg, #3B82F6, #2563EB); color: #fff; }
+        .mode-btn.master { background: linear-gradient(135deg, #EF4444, #DC2626); color: #fff; }
+
+        .master-screen {
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            align-items: center;
+            min-height: calc(100vh - 80px);
+            padding: 20px;
+        }
+
+        .master-mic-btn {
+            width: 200px;
+            height: 200px;
+            border-radius: 50%;
+            border: none;
+            background: linear-gradient(135deg, #EF4444, #DC2626);
+            color: #fff;
+            font-size: 80px;
+            cursor: pointer;
+            transition: transform 0.2s, box-shadow 0.2s;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            box-shadow: 0 10px 40px rgba(239, 68, 68, 0.4);
+        }
+
+        .master-mic-btn:hover {
+            transform: scale(1.05);
+            box-shadow: 0 15px 50px rgba(239, 68, 68, 0.5);
+        }
+
+        .master-mic-btn:active,
+        .master-mic-btn.active {
+            transform: scale(0.95);
+            background: linear-gradient(135deg, #DC2626, #B91C1C);
+            animation: pulse-red 1s infinite;
+        }
+
+        @keyframes pulse-red {
+            0%, 100% { box-shadow: 0 0 0 0 rgba(239, 68, 68, 0.7); }
+            50% { box-shadow: 0 0 0 30px rgba(239, 68, 68, 0); }
+        }
+
+        @keyframes spin {
+            to { transform: rotate(360deg); }
+        }
+
+        .master-instructions {
+            margin-top: 30px;
+            text-align: center;
+            color: #94a3b8;
+        }
+
+        .master-instructions h3 {
+            color: #fff;
+            margin-bottom: 10px;
+        }
+
+        .master-status {
+            margin-top: 20px;
+            padding: 15px 30px;
+            background: rgba(0,0,0,0.3);
+            border-radius: 10px;
+            font-size: 1.2em;
+        }
+
+        .master-status.broadcasting {
+            background: rgba(239, 68, 68, 0.3);
+            color: #EF4444;
+            animation: blink 1s infinite;
+        }
+
+        @keyframes blink {
+            0%, 100% { opacity: 1; }
+            50% { opacity: 0.7; }
+        }
+
+        .master-overlay {
+            position: fixed;
+            top: 0;
+            left: 0;
+            right: 0;
+            bottom: 0;
+            background: rgba(239, 68, 68, 0.95);
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            align-items: center;
+            z-index: 9999;
+        }
+
+        .master-overlay h1 {
+            font-size: 3em;
+            margin-bottom: 20px;
+            animation: blink 1s infinite;
+        }
+
+        .master-overlay p {
+            font-size: 1.5em;
+            opacity: 0.9;
+        }
+
+        .master-overlay .icon {
+            font-size: 100px;
+            margin-bottom: 30px;
+        }
+
+        /* Bulk upload styles */
+        .bulk-upload-zone {
+            border: 3px dashed #3B82F6;
+            border-radius: 15px;
+            padding: 40px;
+            text-align: center;
+            background: rgba(59, 130, 246, 0.1);
+            cursor: pointer;
+            transition: all 0.3s;
+            margin-bottom: 20px;
+        }
+
+        .bulk-upload-zone:hover,
+        .bulk-upload-zone.dragover {
+            background: rgba(59, 130, 246, 0.2);
+            border-color: #60A5FA;
+        }
+
+        .bulk-upload-zone .icon {
+            font-size: 50px;
+            margin-bottom: 15px;
+        }
+
+        .bulk-upload-zone p {
+            color: #94a3b8;
+            margin-bottom: 10px;
+        }
+
+        .bulk-upload-zone .hint {
+            font-size: 0.85em;
+            color: #64748b;
+        }
+
+        .file-list {
+            max-height: 300px;
+            overflow-y: auto;
+            margin: 15px 0;
+        }
+
+        .file-item {
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            padding: 10px 15px;
+            background: rgba(255,255,255,0.05);
+            border-radius: 8px;
+            margin-bottom: 8px;
+        }
+
+        .file-item .file-name {
+            flex: 1;
+            overflow: hidden;
+            text-overflow: ellipsis;
+            white-space: nowrap;
+            margin-right: 10px;
+        }
+
+        .file-item .file-size {
+            color: #64748b;
+            font-size: 0.85em;
+            margin-right: 10px;
+        }
+
+        .file-item .remove-btn {
+            background: #EF4444;
+            color: #fff;
+            border: none;
+            border-radius: 50%;
+            width: 24px;
+            height: 24px;
+            cursor: pointer;
+            font-size: 14px;
+        }
+
+        .upload-progress {
+            margin-top: 15px;
+        }
+
+        .upload-progress-bar {
+            height: 10px;
+            background: rgba(255,255,255,0.1);
+            border-radius: 5px;
+            overflow: hidden;
+        }
+
+        .upload-progress-fill {
+            height: 100%;
+            background: linear-gradient(90deg, #10B981, #3B82F6);
+            border-radius: 5px;
+            transition: width 0.3s;
+        }
+
+        .upload-status {
+            text-align: center;
+            margin-top: 10px;
+            color: #94a3b8;
+        }
+
+        /* Recording styles */
+        .record-section {
+            margin-top: 10px;
+            padding: 20px;
+            background: rgba(139, 92, 246, 0.1);
+            border-radius: 15px;
+            border: 2px dashed #8B5CF6;
+        }
+
+        .record-btn {
+            width: 80px;
+            height: 80px;
+            border-radius: 50%;
+            border: none;
+            background: linear-gradient(135deg, #8B5CF6, #7C3AED);
+            color: #fff;
+            font-size: 30px;
+            cursor: pointer;
+            transition: all 0.2s;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            margin: 0 auto;
+        }
+
+        .record-btn:hover {
+            transform: scale(1.05);
+            box-shadow: 0 5px 20px rgba(139, 92, 246, 0.4);
+        }
+
+        .record-btn.recording {
+            background: linear-gradient(135deg, #EF4444, #DC2626);
+            animation: pulse-red 1s infinite;
+        }
+
+        .record-status {
+            text-align: center;
+            margin-top: 15px;
+            font-size: 0.9em;
+            color: #94a3b8;
+        }
+
+        .record-status.recording {
+            color: #EF4444;
+            font-weight: bold;
+        }
+
+        .record-timer {
+            font-size: 1.5em;
+            font-weight: bold;
+            text-align: center;
+            margin-top: 10px;
+            color: #fff;
+        }
+
+        .audio-preview {
+            margin-top: 15px;
+            padding: 15px;
+            background: rgba(0,0,0,0.2);
+            border-radius: 10px;
+        }
+
+        .audio-preview label {
+            display: block;
+            color: #94a3b8;
+            font-size: 0.9em;
+            margin-bottom: 10px;
+        }
+
+        .audio-preview audio {
+            width: 100%;
+            height: 45px;
+            border-radius: 8px;
+        }
+
+        .audio-preview-buttons {
+            display: flex;
+            gap: 10px;
+            margin-top: 12px;
+        }
+
+        .audio-preview-buttons button {
+            flex: 1;
+            padding: 12px;
+            border: none;
+            border-radius: 8px;
+            cursor: pointer;
+            font-size: 0.95em;
+            font-weight: 500;
+        }
+
+        .btn-discard { background: #6b7280; color: #fff; }
+        .btn-discard:hover { background: #5b6270; }
+        .btn-save-recording { background: #10B981; color: #fff; }
+        .btn-save-recording:hover { background: #059669; }
+
+        .upload-tabs {
+            display: flex;
+            gap: 10px;
+            margin-bottom: 20px;
+        }
+
+        .upload-tab {
+            flex: 1;
+            padding: 12px;
+            border: none;
+            border-radius: 10px;
+            background: rgba(255,255,255,0.1);
+            color: rgba(255,255,255,0.7);
+            cursor: pointer;
+            font-size: 0.95em;
+            transition: all 0.2s;
+        }
+
+        .upload-tab.active {
+            background: #3B82F6;
+            color: #fff;
+        }
+
+        .upload-tab:hover:not(.active) { background: rgba(255,255,255,0.2); }
+
+        .upload-content { display: none; }
+        .upload-content.active { display: block; }
+
+        .file-preview {
+            margin-top: 15px;
+            padding: 15px;
+            background: rgba(0,0,0,0.2);
+            border-radius: 10px;
+        }
+
+        .file-preview label {
+            display: block;
+            color: #94a3b8;
+            font-size: 0.9em;
+            margin-bottom: 8px;
+        }
+
+        .file-preview .file-name {
+            color: #fff;
+            font-weight: 500;
+            margin-bottom: 10px;
+            word-break: break-all;
+        }
+
+        .file-preview audio {
+            width: 100%;
+            height: 45px;
+            border-radius: 8px;
+        }
+
+        .admin-buttons {
+            display: flex;
+            gap: 10px;
+            flex-wrap: wrap;
+            margin-bottom: 15px;
+        }
+    </style>
+</head>
+<body>
+    <div id="login-screen" class="login-container">
+        <div class="login-box">
+            <h1>🎙️ AudioCi</h1>
+            <div id="login-error" class="error-msg hidden"></div>
+            <input type="text" id="username" placeholder="Username" autocomplete="username">
+            <input type="password" id="password" placeholder="Password" autocomplete="current-password">
+            <button onclick="login()">Accedi</button>
+        </div>
+    </div>
+
+    <div id="mode-screen" class="hidden">
+        <div class="header">
+            <h1>🎙️ AudioCi</h1>
+            <div class="header-right">
+                <span id="user-display"></span>
+                <button class="logout-btn" onclick="logout()">Esci</button>
+            </div>
+        </div>
+        <div class="mode-selector">
+            <h2>Seleziona modalita'</h2>
+            <div class="mode-buttons">
+                <button class="mode-btn player" onclick="setMode('player')">
+                    🔊 PLAYER<br><small>PC Reception</small>
+                </button>
+                <button class="mode-btn controller" onclick="setMode('controller')">
+                    🎛️ CONTROLLER<br><small>Controllo remoto</small>
+                </button>
+                <button id="master-mode-btn" class="mode-btn master hidden" onclick="setMode('master')">
+                    🎙️ MASTER<br><small>Annunci Emergenza</small>
+                </button>
+            </div>
+        </div>
+    </div>
+
+    <div id="app-screen" class="hidden">
+        <div class="header">
+            <h1>🎙️ AudioCi</h1>
+            <div class="header-right">
+                <span id="mode-badge" class="status-badge"></span>
+                <span id="connection-status"></span>
+                <div class="user-info">
+                    <span id="app-user-display"></span>
+                    <button class="mode-switch-btn" onclick="switchMode()">Cambia Modalita'</button>
+                    <button class="logout-btn" onclick="logout()">Esci</button>
+                </div>
+            </div>
+        </div>
+
+        <div class="nav-tabs">
+            <button class="nav-tab active" onclick="showTab('soundboard')">Soundboard</button>
+            <button class="nav-tab" onclick="showTab('music')">Musica</button>
+            <button class="nav-tab admin-only" onclick="showTab('admin')">Admin</button>
+        </div>
+
+        <div class="main-content">
+            <div id="tab-soundboard">
+                <div class="breadcrumb">
+                    <button class="breadcrumb-btn hidden" id="back-btn" onclick="goBack()">← Indietro</button>
+                    <span id="current-location">Gruppi</span>
+                </div>
+                <div id="button-container" class="button-grid grid-2"></div>
+            </div>
+
+            <div id="tab-music" class="hidden">
+                <!-- Music Player Section -->
+                <div class="admin-section" style="background:linear-gradient(135deg, rgba(236,72,153,0.2), rgba(139,92,246,0.2));">
+                    <div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:15px;">
+                        <h2>🎵 Musica di Sottofondo</h2>
+                        <div id="music-player-status" style="color:#94a3b8;">Nessuna playlist in riproduzione</div>
+                    </div>
+
+                    <!-- Mini Player Controls -->
+                    <div id="music-mini-player" style="background:rgba(0,0,0,0.3);border-radius:15px;padding:20px;margin-bottom:20px;">
+                        <div style="display:flex;align-items:center;gap:20px;">
+                            <div id="music-now-playing" style="flex:1;">
+                                <div id="music-track-title" style="font-size:1.1em;font-weight:bold;">Nessun brano</div>
+                                <div id="music-track-artist" style="color:#94a3b8;font-size:0.9em;">-</div>
+                            </div>
+                            <div style="display:flex;gap:10px;">
+                                <button onclick="musicPrev()" style="width:45px;height:45px;border-radius:50%;border:none;background:#6366F1;color:#fff;font-size:1.2em;cursor:pointer;">⏮️</button>
+                                <button id="music-play-pause-btn" onclick="musicPlayPause()" style="width:55px;height:55px;border-radius:50%;border:none;background:#EC4899;color:#fff;font-size:1.5em;cursor:pointer;">▶️</button>
+                                <button onclick="musicNext()" style="width:45px;height:45px;border-radius:50%;border:none;background:#6366F1;color:#fff;font-size:1.2em;cursor:pointer;">⏭️</button>
+                                <button onclick="musicStop()" style="width:45px;height:45px;border-radius:50%;border:none;background:#EF4444;color:#fff;font-size:1.2em;cursor:pointer;">⏹️</button>
+                            </div>
+                        </div>
+                        <div style="margin-top:15px;">
+                            <div style="display:flex;align-items:center;gap:10px;">
+                                <span id="music-time-current" style="font-size:0.8em;color:#94a3b8;min-width:40px;">0:00</span>
+                                <div id="music-progress-container" onclick="seekMusic(event)" style="flex:1;height:8px;background:rgba(255,255,255,0.2);border-radius:4px;cursor:pointer;">
+                                    <div id="music-progress-bar" style="height:100%;background:linear-gradient(90deg,#EC4899,#6366F1);border-radius:4px;width:0%;transition:width 0.1s;"></div>
+                                </div>
+                                <span id="music-time-total" style="font-size:0.8em;color:#94a3b8;min-width:40px;">0:00</span>
+                            </div>
+                        </div>
+                        <div style="display:flex;justify-content:space-between;align-items:center;margin-top:10px;">
+                            <div style="display:flex;gap:10px;">
+                                <button id="music-shuffle-btn" onclick="toggleMusicShuffle()" style="padding:8px 15px;border:none;border-radius:8px;background:rgba(255,255,255,0.1);color:#fff;cursor:pointer;" title="Riproduzione casuale">🔀 Shuffle</button>
+                                <button id="music-repeat-btn" onclick="toggleMusicRepeat()" style="padding:8px 15px;border:none;border-radius:8px;background:rgba(255,255,255,0.1);color:#fff;cursor:pointer;" title="Ripeti brano singolo">🔂 Ripeti brano</button>
+                                <button id="music-loop-btn" onclick="toggleMusicLoop()" style="padding:8px 15px;border:none;border-radius:8px;background:rgba(255,255,255,0.1);color:#fff;cursor:pointer;" title="Loop playlist">🔁 Loop playlist</button>
+                            </div>
+                            <div id="music-playlist-info" style="color:#94a3b8;font-size:0.9em;">Brano 0 / 0</div>
+                        </div>
+                        <div id="music-current-playlist-name" style="margin-top:10px;padding:8px 15px;background:rgba(236,72,153,0.2);border-radius:8px;color:#EC4899;font-weight:500;display:none;">
+                            📋 <span id="music-playlist-name-text">Nessuna playlist</span>
+                        </div>
+                    </div>
+
+                    <!-- Playlists -->
+                    <h3 style="margin-bottom:15px;">📋 Playlist</h3>
+                    <div id="playlists-container" style="display:grid;grid-template-columns:repeat(auto-fill,minmax(200px,1fr));gap:15px;margin-bottom:20px;">
+                    </div>
+                    <button class="btn-add admin-only" onclick="openPlaylistModal()" style="margin-bottom:20px;">+ Nuova Playlist</button>
+                </div>
+
+                <!-- All Tracks Section (Admin Only) -->
+                <div class="admin-section admin-only">
+                    <h2>🎶 Libreria Musicale</h2>
+                    <p style="color:#94a3b8;margin-bottom:15px;">Carica file MP3 per creare la tua libreria musicale</p>
+
+                    <!-- Music Upload Zone -->
+                    <div id="music-upload-zone" class="bulk-upload-zone" style="border-color:#EC4899;background:rgba(236,72,153,0.1);"
+                         ondrop="handleMusicDrop(event)"
+                         ondragover="handleMusicDragOver(event)"
+                         ondragleave="handleMusicDragLeave(event)"
+                         onclick="document.getElementById('music-file-input').click()">
+                        <div class="icon">🎵</div>
+                        <p><strong>Trascina qui i file musicali</strong></p>
+                        <p>oppure clicca per selezionare</p>
+                        <p class="hint">Supportati: MP3, WAV, OGG, M4A</p>
+                    </div>
+                    <input type="file" id="music-file-input" multiple accept="audio/*" style="display:none;" onchange="handleMusicFileSelect(event)">
+
+                    <!-- Track List -->
+                    <h3 style="margin:20px 0 15px 0;">Tutti i brani (<span id="music-count">0</span>)</h3>
+                    <div id="music-tracks-list" class="item-list" style="max-height:400px;overflow-y:auto;"></div>
+                </div>
+            </div>
+
+            <div id="tab-admin" class="hidden">
+                <!-- Bulk Upload Section -->
+                <div class="admin-section">
+                    <h2>📤 Carica Annunci</h2>
+                    <p style="color:#94a3b8;margin-bottom:15px;">Carica uno o piu' file audio. Verranno creati automaticamente gli annunci con il nome del file.</p>
+                    
+                    <div id="bulk-upload-zone" class="bulk-upload-zone"
+                         ondrop="handleDrop(event)" 
+                         ondragover="handleDragOver(event)" 
+                         ondragleave="handleDragLeave(event)"
+                         onclick="document.getElementById('bulk-file-input').click()">
+                        <div class="icon">📁</div>
+                        <p><strong>Trascina qui i file audio</strong></p>
+                        <p>oppure clicca per selezionare</p>
+                        <p class="hint">Supportati: MP3, WAV, OGG, WebM, M4A</p>
+                    </div>
+                    <input type="file" id="bulk-file-input" multiple accept="audio/*" style="display:none;" onchange="handleFileSelect(event)">
+                    
+                    <div id="bulk-file-list" class="file-list hidden"></div>
+                    
+                    <div id="bulk-group-select" class="modal-field hidden">
+                        <label>Seleziona il gruppo di destinazione:</label>
+                        <select id="bulk-target-group"></select>
+                    </div>
+                    
+                    <div id="bulk-upload-progress" class="upload-progress hidden">
+                        <div class="upload-progress-bar">
+                            <div id="bulk-progress-fill" class="upload-progress-fill" style="width:0%"></div>
+                        </div>
+                        <div id="bulk-upload-status" class="upload-status">Caricamento in corso...</div>
+                    </div>
+                    
+                    <div id="bulk-upload-actions" class="modal-buttons hidden">
+                        <button class="modal-btn-cancel" onclick="clearBulkUpload()">Annulla</button>
+                        <button class="modal-btn-save" onclick="executeBulkUpload()">📤 Carica Tutti</button>
+                    </div>
+                </div>
+
+                <!-- TTS Generation Section -->
+                <div class="admin-section" style="background:linear-gradient(135deg, rgba(139,92,246,0.2), rgba(59,130,246,0.2));">
+                    <h2>🎙️ Genera Annuncio con AI</h2>
+                    <p style="color:#94a3b8;margin-bottom:15px;">Scrivi il testo in italiano e genera automaticamente gli audio in più lingue con voce sintetizzata.</p>
+
+                    <div class="modal-field">
+                        <label>Nome annuncio</label>
+                        <input type="text" id="tts-name" placeholder="Es: Benvenuto a bordo">
+                    </div>
+
+                    <div class="modal-field">
+                        <label>Testo da pronunciare (in italiano)</label>
+                        <textarea id="tts-text" rows="4" placeholder="Scrivi qui il testo dell'annuncio in italiano. Verrà tradotto automaticamente nelle lingue selezionate."
+                                  style="width:100%;padding:12px;border:none;border-radius:10px;background:rgba(255,255,255,0.1);color:#fff;font-size:1em;resize:vertical;"></textarea>
+                    </div>
+
+                    <div class="modal-field">
+                        <label>Gruppo di destinazione</label>
+                        <select id="tts-group"></select>
+                    </div>
+
+                    <div class="modal-field">
+                        <label>Voce</label>
+                        <div style="display:flex;gap:15px;margin-top:8px;">
+                            <label style="display:flex;align-items:center;gap:5px;cursor:pointer;">
+                                <input type="radio" name="tts-gender" value="female" checked> 👩 Femminile
+                            </label>
+                            <label style="display:flex;align-items:center;gap:5px;cursor:pointer;">
+                                <input type="radio" name="tts-gender" value="male"> 👨 Maschile
+                            </label>
+                        </div>
+                    </div>
+
+                    <div class="modal-field">
+                        <label>Lingue da generare (ordine di riproduzione)</label>
+                        <div id="tts-languages" style="display:flex;flex-wrap:wrap;gap:10px;margin-top:8px;">
+                            <label style="display:flex;align-items:center;gap:5px;cursor:pointer;background:rgba(255,255,255,0.1);padding:8px 12px;border-radius:8px;">
+                                <input type="checkbox" value="it" checked> 🇮🇹 Italiano
+                            </label>
+                            <label style="display:flex;align-items:center;gap:5px;cursor:pointer;background:rgba(255,255,255,0.1);padding:8px 12px;border-radius:8px;">
+                                <input type="checkbox" value="en" checked> 🇬🇧 English
+                            </label>
+                            <label style="display:flex;align-items:center;gap:5px;cursor:pointer;background:rgba(255,255,255,0.1);padding:8px 12px;border-radius:8px;">
+                                <input type="checkbox" value="fr" checked> 🇫🇷 Français
+                            </label>
+                            <label style="display:flex;align-items:center;gap:5px;cursor:pointer;background:rgba(255,255,255,0.1);padding:8px 12px;border-radius:8px;">
+                                <input type="checkbox" value="de"> 🇩🇪 Deutsch
+                            </label>
+                            <label style="display:flex;align-items:center;gap:5px;cursor:pointer;background:rgba(255,255,255,0.1);padding:8px 12px;border-radius:8px;">
+                                <input type="checkbox" value="es"> 🇪🇸 Español
+                            </label>
+                            <label style="display:flex;align-items:center;gap:5px;cursor:pointer;background:rgba(255,255,255,0.1);padding:8px 12px;border-radius:8px;">
+                                <input type="checkbox" value="el"> 🇬🇷 Ελληνικά
+                            </label>
+                        </div>
+                    </div>
+
+                    <div class="modal-field">
+                        <label style="display:flex;align-items:center;gap:8px;cursor:pointer;">
+                            <input type="checkbox" id="tts-create-sequence" checked>
+                            Crea automaticamente una sequenza con tutte le lingue
+                        </label>
+                    </div>
+
+                    <div id="tts-progress" class="hidden" style="margin:15px 0;padding:15px;background:rgba(139,92,246,0.2);border-radius:10px;">
+                        <div style="display:flex;align-items:center;gap:10px;">
+                            <div class="spinner" style="width:20px;height:20px;border:3px solid rgba(255,255,255,0.3);border-top-color:#8B5CF6;border-radius:50%;animation:spin 1s linear infinite;"></div>
+                            <span id="tts-status">Generazione in corso...</span>
+                        </div>
+                    </div>
+
+                    <button class="btn-add" onclick="generateTTS()" style="background:linear-gradient(135deg, #8B5CF6, #3B82F6);width:100%;margin-top:10px;">
+                        🎙️ Genera Annunci
+                    </button>
+                </div>
+
+                <div class="admin-section">
+                    <h2>Gestione Gruppi</h2>
+                    <button class="btn-add" onclick="openGroupModal()">+ Aggiungi Gruppo</button>
+                    <div id="groups-list" class="item-list"></div>
+                </div>
+
+                <div class="admin-section">
+                    <h2>Gestione Annunci</h2>
+                    <div class="admin-buttons">
+                        <button class="btn-add" onclick="openAnnouncementModal()">+ Aggiungi Annuncio Vuoto</button>
+                    </div>
+                    <div id="announcements-list" class="item-list"></div>
+                </div>
+
+                <div class="admin-section">
+                    <h2>🔗 Sequenze (Annunci Multipli)</h2>
+                    <p style="color:#94a3b8;font-size:0.9em;margin-bottom:15px;">Crea sequenze per riprodurre più annunci in serie con un solo click (es: stesso annuncio in più lingue)</p>
+                    <button class="btn-add" onclick="openSequenceModal()">+ Nuova Sequenza</button>
+                    <div id="sequences-list" class="item-list"></div>
+                </div>
+
+                <div class="admin-section">
+                    <h2>Gestione Utenti</h2>
+                    <button class="btn-add" onclick="openUserModal()">+ Aggiungi Utente</button>
+                    <div id="users-list" class="item-list"></div>
+                </div>
+            </div>
+        </div>
+
+        <div class="player-bar">
+            <div class="now-playing">
+                <div id="status-icon" class="status-icon stopped">⏹️</div>
+                <div>
+                    <div id="now-playing-title">Nessuna riproduzione</div>
+                    <div id="now-playing-status" style="font-size:0.8em;color:#888;">In attesa</div>
+                </div>
+            </div>
+            <div class="progress-section">
+                <div class="progress-bar-container" onclick="seekAudio(event)">
+                    <div id="progress-bar" class="progress-bar"></div>
+                </div>
+                <div class="progress-time">
+                    <span id="time-current">0:00</span>
+                    <span id="time-remaining">-0:00</span>
+                </div>
+            </div>
+            <div class="player-controls">
+                <button onclick="sendCommand('stop')" class="stop-btn">⏹️</button>
+            </div>
+        </div>
+    </div>
+
+    <div id="master-screen" class="hidden">
+        <div class="header">
+            <h1>🎙️ AudioCi MASTER</h1>
+            <div class="header-right">
+                <span class="status-badge" style="background:#EF4444;">🎙️ MASTER</span>
+                <span id="master-connection-status"></span>
+                <div class="user-info">
+                    <span id="master-user-display"></span>
+                    <button class="mode-switch-btn" onclick="switchMode()">Cambia Modalita'</button>
+                    <button class="logout-btn" onclick="logout()">Esci</button>
+                </div>
+            </div>
+        </div>
+        <div class="master-screen">
+            <button id="master-mic-btn" class="master-mic-btn"
+                    onmousedown="startMasterBroadcast()"
+                    onmouseup="stopMasterBroadcast()"
+                    ontouchstart="startMasterBroadcast()"
+                    ontouchend="stopMasterBroadcast()">
+                🎙️
+            </button>
+            <div class="master-instructions">
+                <h3>ANNUNCIO EMERGENZA</h3>
+                <p>Tieni premuto il pulsante per parlare</p>
+                <p>Tutti i player riceveranno l'audio in tempo reale</p>
+            </div>
+            <div id="master-status" class="master-status">Pronto per trasmettere</div>
+        </div>
+    </div>
+
+    <div id="master-overlay" class="master-overlay hidden">
+        <div class="icon">📢</div>
+        <h1>ANNUNCIO EMERGENZA IN CORSO</h1>
+        <p id="master-overlay-user">Il Comandante sta parlando...</p>
+    </div>
+
+    <audio id="audio-player" style="display:none;"></audio>
+    <audio id="music-audio-player" style="display:none;"></audio>
+
+    <!-- Modal Playlist -->
+    <div id="modal-playlist" class="modal-overlay hidden">
+        <div class="modal" style="max-width:600px;">
+            <h2 id="modal-playlist-title">📋 Nuova Playlist</h2>
+            <div class="modal-field">
+                <label>Nome playlist</label>
+                <input type="text" id="modal-playlist-name" placeholder="Es: Chill Music, Party Mix...">
+            </div>
+            <div class="modal-field">
+                <label>Brani nella playlist:</label>
+                <div id="playlist-available-tracks" style="max-height:150px;overflow-y:auto;margin-bottom:10px;display:flex;flex-wrap:wrap;gap:8px;"></div>
+                <div style="background:rgba(236,72,153,0.2);border:2px dashed #EC4899;border-radius:10px;padding:15px;min-height:60px;">
+                    <p style="color:#EC4899;margin:0 0 10px 0;font-size:0.9em;">Brani selezionati (trascina per riordinare):</p>
+                    <div id="playlist-selected-tracks" style="display:flex;flex-wrap:wrap;gap:8px;min-height:40px;"></div>
+                </div>
+            </div>
+            <input type="hidden" id="modal-playlist-id">
+            <div class="modal-buttons">
+                <button class="modal-btn-cancel" onclick="closeModal('playlist')">Annulla</button>
+                <button class="modal-btn-save" onclick="savePlaylist()">Salva</button>
+            </div>
+        </div>
+    </div>
+
+    <!-- Modal Gruppo -->
+    <div id="modal-group" class="modal-overlay hidden">
+        <div class="modal">
+            <h2>Nuovo Gruppo</h2>
+            <div class="modal-field">
+                <label>Nome del gruppo</label>
+                <input type="text" id="modal-group-name" placeholder="Es: Imbarco, Emergenze...">
+            </div>
+            <div class="modal-field">
+                <label>Colore</label>
+                <input type="color" id="modal-group-color" value="#3B82F6">
+            </div>
+            <div class="modal-buttons">
+                <button class="modal-btn-cancel" onclick="closeModal('group')">Annulla</button>
+                <button class="modal-btn-save" onclick="saveGroup()">Salva</button>
+            </div>
+        </div>
+    </div>
+
+    <!-- Modal Annuncio -->
+    <div id="modal-announcement" class="modal-overlay hidden">
+        <div class="modal">
+            <h2>Nuovo Annuncio</h2>
+            <div class="modal-field">
+                <label>Nome dell'annuncio</label>
+                <input type="text" id="modal-announcement-name" placeholder="Es: Benvenuto IT, Emergenza fuoco...">
+            </div>
+            <div class="modal-field">
+                <label>Gruppo</label>
+                <select id="modal-announcement-group"></select>
+            </div>
+            <div class="modal-field">
+                <label>Colore</label>
+                <input type="color" id="modal-announcement-color" value="#10B981">
+            </div>
+            <div class="modal-buttons">
+                <button class="modal-btn-cancel" onclick="closeModal('announcement')">Annulla</button>
+                <button class="modal-btn-save" onclick="saveAnnouncement()">Salva</button>
+            </div>
+        </div>
+    </div>
+
+    <!-- Modal Utente -->
+    <div id="modal-user" class="modal-overlay hidden">
+        <div class="modal">
+            <h2>Nuovo Utente</h2>
+            <div class="modal-field">
+                <label>Username</label>
+                <input type="text" id="modal-user-name" placeholder="Nome utente">
+            </div>
+            <div class="modal-field">
+                <label>Password</label>
+                <input type="password" id="modal-user-pass" placeholder="Password">
+            </div>
+            <div class="modal-field">
+                <label>Ruolo</label>
+                <select id="modal-user-role">
+                    <option value="operator">Operatore (solo riproduzione)</option>
+                    <option value="admin">Admin (gestione completa)</option>
+                    <option value="master">Master (annunci emergenza)</option>
+                </select>
+            </div>
+            <div class="modal-buttons">
+                <button class="modal-btn-cancel" onclick="closeModal('user')">Annulla</button>
+                <button class="modal-btn-save" onclick="saveUser()">Salva</button>
+            </div>
+        </div>
+    </div>
+
+    <!-- Modal Upload singolo -->
+    <div id="modal-upload" class="modal-overlay hidden">
+        <div class="modal">
+            <h2>Aggiungi Audio</h2>
+            <div class="modal-field">
+                <label>Annuncio: <strong id="modal-upload-announcement-name"></strong></label>
+            </div>
+            
+            <div class="upload-tabs">
+                <button class="upload-tab active" onclick="switchUploadTab('file', this)">📁 Carica File</button>
+                <button class="upload-tab" onclick="switchUploadTab('record', this)">🎙️ Registra</button>
+            </div>
+            
+            <div id="upload-tab-file" class="upload-content active">
+                <div class="modal-field">
+                    <label>Seleziona file audio</label>
+                    <input type="file" id="modal-upload-file" accept="audio/*" onchange="previewUploadFile()" style="background:#374151;padding:10px;width:100%;border-radius:10px;">
+                </div>
+                <div id="file-preview" class="file-preview hidden">
+                    <label>Anteprima:</label>
+                    <div id="file-preview-name" class="file-name"></div>
+                    <audio id="file-preview-audio" controls></audio>
+                </div>
+                <div class="modal-buttons">
+                    <button class="modal-btn-cancel" onclick="closeModal('upload')">Annulla</button>
+                    <button class="modal-btn-save" onclick="saveUpload()">Carica</button>
+                </div>
+            </div>
+            
+            <div id="upload-tab-record" class="upload-content">
+                <div class="record-section">
+                    <div style="text-align: center;">
+                        <button id="record-btn" class="record-btn" onclick="toggleRecording()">🎙️</button>
+                        <div id="record-status" class="record-status">Premi per registrare</div>
+                        <div id="record-timer" class="record-timer hidden">0:00</div>
+                    </div>
+                </div>
+                <div id="record-preview" class="audio-preview hidden">
+                    <label>Anteprima registrazione:</label>
+                    <audio id="record-audio-preview" controls></audio>
+                    <div class="audio-preview-buttons">
+                        <button class="btn-discard" onclick="discardRecording()">🗑️ Scarta</button>
+                        <button class="btn-save-recording" onclick="saveRecording()">💾 Salva</button>
+                    </div>
+                </div>
+                <div class="modal-buttons" style="margin-top: 15px;">
+                    <button class="modal-btn-cancel" onclick="closeModal('upload')">Chiudi</button>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Modal Anteprima Audio -->
+    <div id="modal-preview" class="modal-overlay hidden">
+        <div class="modal">
+            <h2>▶️ Anteprima Audio</h2>
+            <div class="modal-field">
+                <label>Annuncio: <strong id="modal-preview-name"></strong></label>
+            </div>
+            <div id="preview-files-list" style="max-height:300px;overflow-y:auto;margin-bottom:15px;"></div>
+            <div class="modal-buttons">
+                <button class="modal-btn-cancel" onclick="closeModal('preview')">Chiudi</button>
+            </div>
+        </div>
+    </div>
+
+    <!-- Modal Sposta Annuncio -->
+    <div id="modal-move" class="modal-overlay hidden">
+        <div class="modal">
+            <h2>📁 Sposta Annuncio</h2>
+            <div class="modal-field">
+                <label>Annuncio: <strong id="modal-move-name"></strong></label>
+            </div>
+            <div class="modal-field">
+                <label>Seleziona nuovo gruppo</label>
+                <select id="modal-move-group"></select>
+            </div>
+            <input type="hidden" id="modal-move-id">
+            <div class="modal-buttons">
+                <button class="modal-btn-cancel" onclick="closeModal('move')">Annulla</button>
+                <button class="modal-btn-save" onclick="moveAnnouncement()">Sposta</button>
+            </div>
+        </div>
+    </div>
+
+    <!-- Modal Sequenza -->
+    <div id="modal-sequence" class="modal-overlay hidden">
+        <div class="modal" style="max-width:650px;">
+            <h2 id="modal-sequence-title">🔗 Nuova Sequenza</h2>
+            <div class="modal-field">
+                <label>Nome sequenza (es: "Imbarco 4 lingue")</label>
+                <input type="text" id="modal-sequence-name" placeholder="Nome della sequenza...">
+            </div>
+            <div class="modal-field">
+                <label>Gruppo</label>
+                <select id="modal-sequence-group"></select>
+            </div>
+            <div class="modal-field">
+                <label>Colore</label>
+                <input type="color" id="modal-sequence-color" value="#8B5CF6">
+            </div>
+
+            <!-- Tab per scegliere tra annunci esistenti o upload -->
+            <div class="upload-tabs" style="margin-bottom:15px;">
+                <button class="upload-tab active" onclick="switchSequenceTab('existing', this)">📋 Annunci Esistenti</button>
+                <button class="upload-tab" onclick="switchSequenceTab('upload', this)">📤 Carica Nuovi File</button>
+            </div>
+
+            <!-- Tab annunci esistenti -->
+            <div id="seq-tab-existing" class="modal-field">
+                <label>Seleziona annunci esistenti:</label>
+                <div id="sequence-available" style="display:flex;gap:10px;flex-wrap:wrap;margin-bottom:10px;max-height:150px;overflow-y:auto;">
+                </div>
+                <div style="background:rgba(139,92,246,0.2);border:2px dashed #8B5CF6;border-radius:10px;padding:15px;min-height:60px;">
+                    <p style="color:#8B5CF6;margin:0 0 10px 0;font-size:0.9em;">Annunci selezionati (in ordine):</p>
+                    <div id="sequence-selected" style="display:flex;gap:10px;flex-wrap:wrap;min-height:40px;">
+                    </div>
+                </div>
+            </div>
+
+            <!-- Tab upload nuovi file -->
+            <div id="seq-tab-upload" class="modal-field hidden">
+                <label>Carica file audio (verranno riprodotti nell'ordine alfabetico del nome file):</label>
+                <div id="sequence-upload-zone" style="background:rgba(139,92,246,0.1);border:2px dashed #8B5CF6;border-radius:10px;padding:20px;text-align:center;cursor:pointer;margin-bottom:10px;"
+                     onclick="document.getElementById('sequence-files-input').click()"
+                     ondragover="event.preventDefault();this.style.background='rgba(139,92,246,0.3)'"
+                     ondragleave="this.style.background='rgba(139,92,246,0.1)'"
+                     ondrop="handleSequenceFileDrop(event)">
+                    <p style="margin:0;color:#8B5CF6;">📁 Clicca o trascina i file audio qui</p>
+                    <p style="margin:5px 0 0 0;font-size:0.8em;color:#94a3b8;">Supporta selezione multipla e cartelle</p>
+                    <input type="file" id="sequence-files-input" multiple accept="audio/*" style="display:none" onchange="handleSequenceFileSelect(event)" webkitdirectory>
+                </div>
+                <div id="sequence-files-list" style="max-height:200px;overflow-y:auto;">
+                </div>
+            </div>
+
+            <input type="hidden" id="modal-sequence-id">
+            <div class="modal-buttons">
+                <button class="modal-btn-cancel" onclick="closeModal('sequence')">Annulla</button>
+                <button class="modal-btn-save" onclick="saveSequence()">Salva</button>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        // State
+        let token = localStorage.getItem('token');
+        let userRole = localStorage.getItem('role');
+        let username = localStorage.getItem('username');
+        let mode = null;
+        let ws = null;
+        let currentGroupId = null;
+        let groups = [];
+        let announcements = [];
+        let sequences = [];
+        let currentUploadAnnouncementId = null;
+        let selectedSequenceAnnouncements = [];
+        let sequenceUploadFiles = [];
+        let sequenceUploadMode = 'existing'; // 'existing' or 'upload'
+
+        const API_BASE = '';
+        const audioPlayer = document.getElementById('audio-player');
+        let audioQueue = [];
+        let isPlaying = false;
+        let currentPlayingAnnouncementId = null;
+
+        // Master mode state
+        let mediaStream = null;
+        let audioContext = null;
+        let mediaRecorder = null;
+        let isBroadcasting = false;
+        let masterAudioContext = null;
+
+        // Recording state
+        let recordingStream = null;
+        let announcementRecorder = null;
+        let recordedChunks = [];
+        let isRecordingAnnouncement = false;
+        let recordingStartTime = null;
+        let recordingTimerInterval = null;
+        let recordedBlob = null;
+
+        // Bulk upload state
+        let bulkFiles = [];
+
+        // Init
+        document.addEventListener('DOMContentLoaded', () => {
+            if (token) showModeSelection();
+            document.getElementById('password').addEventListener('keypress', (e) => {
+                if (e.key === 'Enter') login();
+            });
+        });
+
+        // Auth
+        async function login() {
+            const user = document.getElementById('username').value;
+            const pass = document.getElementById('password').value;
+
+            try {
+                const formData = new FormData();
+                formData.append('username', user);
+                formData.append('password', pass);
+
+                const resp = await fetch(`${API_BASE}/api/auth/login`, {
+                    method: 'POST',
+                    body: formData
+                });
+
+                if (!resp.ok) throw new Error('Credenziali non valide');
+
+                const data = await resp.json();
+                token = data.access_token;
+                userRole = data.role;
+                username = data.username;
+
+                localStorage.setItem('token', token);
+                localStorage.setItem('role', userRole);
+                localStorage.setItem('username', username);
+
+                showModeSelection();
+            } catch (e) {
+                document.getElementById('login-error').textContent = e.message;
+                document.getElementById('login-error').classList.remove('hidden');
+            }
+        }
+
+        function logout() {
+            localStorage.clear();
+            token = null;
+            userRole = null;
+            username = null;
+            if (ws) ws.close();
+            location.reload();
+        }
+
+        function showModeSelection() {
+            document.getElementById('login-screen').classList.add('hidden');
+            document.getElementById('app-screen').classList.add('hidden');
+            document.getElementById('master-screen').classList.add('hidden');
+            document.getElementById('mode-screen').classList.remove('hidden');
+            document.getElementById('user-display').textContent = `${username} (${userRole})`;
+
+            const masterBtn = document.getElementById('master-mode-btn');
+            masterBtn.classList.toggle('hidden', userRole !== 'master');
+        }
+
+        function switchMode() {
+            if (ws) { ws.close(); ws = null; }
+            if (isBroadcasting) stopMasterBroadcast();
+            if (mediaStream) { mediaStream.getTracks().forEach(t => t.stop()); mediaStream = null; }
+            showModeSelection();
+        }
+
+        function setMode(m) {
+            mode = m;
+            if (mode === 'master') showMasterScreen();
+            else showAppScreen();
+        }
+
+        function showMasterScreen() {
+            document.getElementById('mode-screen').classList.add('hidden');
+            document.getElementById('app-screen').classList.add('hidden');
+            document.getElementById('master-screen').classList.remove('hidden');
+            document.getElementById('master-user-display').textContent = username;
+            connectWebSocket('master');
+        }
+
+        function showAppScreen() {
+            document.getElementById('mode-screen').classList.add('hidden');
+            document.getElementById('master-screen').classList.add('hidden');
+            document.getElementById('app-screen').classList.remove('hidden');
+
+            const badge = document.getElementById('mode-badge');
+            if (mode === 'player') {
+                badge.textContent = '🔊 PLAYER';
+                badge.className = 'status-badge status-player';
+            } else {
+                badge.textContent = '🎛️ CONTROLLER';
+                badge.className = 'status-badge status-controller';
+            }
+
+            document.getElementById('app-user-display').textContent = `${username} (${userRole})`;
+            document.querySelectorAll('.admin-only').forEach(el => {
+                el.style.display = userRole === 'admin' ? '' : 'none';
+            });
+
+            connectWebSocket(mode);
+            loadGroups();
+        }
+
+        // WebSocket
+        function connectWebSocket(type) {
+            const protocol = location.protocol === 'https:' ? 'wss:' : 'ws:';
+            const wsUrl = `${protocol}//${location.host}/ws/${type}`;
+            ws = new WebSocket(wsUrl);
+
+            ws.onopen = () => updateConnectionStatus(true);
+            ws.onclose = () => {
+                updateConnectionStatus(false);
+                setTimeout(() => { if (mode) connectWebSocket(type); }, 3000);
+            };
+            ws.onerror = (e) => console.error('WebSocket error:', e);
+            ws.onmessage = (event) => {
+                if (event.data instanceof Blob) {
+                    if (mode === 'player') playMasterAudio(event.data);
+                    return;
+                }
+                handleWebSocketMessage(JSON.parse(event.data));
+            };
+        }
+
+        function updateConnectionStatus(connected) {
+            const statusEl = mode === 'master'
+                ? document.getElementById('master-connection-status')
+                : document.getElementById('connection-status');
+            if (statusEl) statusEl.textContent = connected ? '🟢 Connesso' : '🔴 Disconnesso';
+        }
+
+        function handleWebSocketMessage(data) {
+            switch(data.type) {
+                case 'play': if (mode === 'player') playAudio(data); break;
+                case 'stop': if (mode === 'player') stopAudio(); break;
+                case 'player_status': break;
+                case 'master_start':
+                    if (mode !== 'master') {
+                        document.getElementById('master-overlay-user').textContent = `${data.username} sta parlando...`;
+                        document.getElementById('master-overlay').classList.remove('hidden');
+                        if (mode === 'player') stopAudio();
+                    }
+                    break;
+                case 'master_stop':
+                    document.getElementById('master-overlay').classList.add('hidden');
+                    break;
+                case 'blocked': alert('Annuncio master in corso - attendere'); break;
+            }
+        }
+
+        // Audio playback
+        function playAudio(data) {
+            if (data.content === 'announcement' && data.files && data.files.length > 0) {
+                audioQueue = data.files.map(f => `${API_BASE}/audio/announcements/${f}`);
+                playNextInQueue();
+            }
+        }
+
+        function playNextInQueue() {
+            if (audioQueue.length === 0) {
+                isPlaying = false;
+                currentPlayingAnnouncementId = null;
+                currentPlayingSequenceId = null;
+                updateNowPlaying(null);
+                sendPlayerStatus('stopped');
+                return;
+            }
+            const url = audioQueue.shift();
+            console.log('Playing:', url);
+            audioPlayer.src = url;
+            audioPlayer.play().then(() => {
+                console.log('Playback started');
+                isPlaying = true;
+                updateNowPlaying(url.split('/').pop());
+                sendPlayerStatus('playing');
+            }).catch(err => {
+                console.error('Playback error:', err);
+                alert('Errore riproduzione: ' + err.message + '\nProva a cliccare prima su un punto qualsiasi della pagina.');
+                playNextInQueue();
+            });
+        }
+
+        audioPlayer.onended = () => playNextInQueue();
+        audioPlayer.ontimeupdate = () => {
+            if (audioPlayer.duration) {
+                document.getElementById('progress-bar').style.width = `${(audioPlayer.currentTime / audioPlayer.duration) * 100}%`;
+                document.getElementById('time-current').textContent = formatTime(audioPlayer.currentTime);
+                document.getElementById('time-remaining').textContent = `-${formatTime(audioPlayer.duration - audioPlayer.currentTime)}`;
+            }
+        };
+
+        function formatTime(seconds) {
+            const m = Math.floor(seconds / 60);
+            const s = Math.floor(seconds % 60);
+            return `${m}:${s.toString().padStart(2, '0')}`;
+        }
+
+        function seekAudio(event) {
+            if (!audioPlayer.duration) return;
+            const rect = event.target.getBoundingClientRect();
+            audioPlayer.currentTime = ((event.clientX - rect.left) / rect.width) * audioPlayer.duration;
+        }
+
+        function stopAudio() {
+            audioPlayer.pause();
+            audioPlayer.currentTime = 0;
+            audioQueue = [];
+            isPlaying = false;
+            currentPlayingAnnouncementId = null;
+            currentPlayingSequenceId = null;
+            updateNowPlaying(null);
+            document.getElementById('progress-bar').style.width = '0%';
+            document.getElementById('time-current').textContent = '0:00';
+            document.getElementById('time-remaining').textContent = '-0:00';
+            sendPlayerStatus('stopped');
+        }
+
+        function updateNowPlaying(filename) {
+            const titleEl = document.getElementById('now-playing-title');
+            const statusEl = document.getElementById('now-playing-status');
+            const iconEl = document.getElementById('status-icon');
+            if (filename) {
+                titleEl.textContent = filename;
+                statusEl.textContent = 'In riproduzione';
+                iconEl.textContent = '▶️';
+                iconEl.classList.remove('stopped');
+            } else {
+                titleEl.textContent = 'Nessuna riproduzione';
+                statusEl.textContent = 'In attesa';
+                iconEl.textContent = '⏹️';
+                iconEl.classList.add('stopped');
+            }
+        }
+
+        function sendPlayerStatus(status) {
+            if (ws && ws.readyState === WebSocket.OPEN && mode === 'player') {
+                ws.send(JSON.stringify({ status }));
+            }
+        }
+
+        // Master audio
+        async function playMasterAudio(blob) {
+            if (!masterAudioContext) masterAudioContext = new (window.AudioContext || window.webkitAudioContext)();
+            try {
+                const arrayBuffer = await blob.arrayBuffer();
+                const audioBuffer = await masterAudioContext.decodeAudioData(arrayBuffer);
+                const source = masterAudioContext.createBufferSource();
+                source.buffer = audioBuffer;
+                source.connect(masterAudioContext.destination);
+                source.start();
+            } catch (e) { console.error('Error playing master audio:', e); }
+        }
+
+        async function startMasterBroadcast() {
+            if (isBroadcasting) return;
+            try {
+                mediaStream = await navigator.mediaDevices.getUserMedia({ audio: true });
+                let mimeType = 'audio/webm;codecs=opus';
+                if (!MediaRecorder.isTypeSupported(mimeType)) mimeType = 'audio/webm';
+                mediaRecorder = new MediaRecorder(mediaStream, { mimeType });
+                mediaRecorder.ondataavailable = (e) => {
+                    if (e.data.size > 0 && ws && ws.readyState === WebSocket.OPEN) ws.send(e.data);
+                };
+                ws.send(JSON.stringify({ action: 'start_announcement', username }));
+                mediaRecorder.start(100);
+                isBroadcasting = true;
+                document.getElementById('master-mic-btn').classList.add('active');
+                document.getElementById('master-status').textContent = 'TRASMISSIONE IN CORSO';
+                document.getElementById('master-status').classList.add('broadcasting');
+            } catch (e) { alert('Errore accesso microfono: ' + e.message); }
+        }
+
+        function stopMasterBroadcast() {
+            if (!isBroadcasting) return;
+            if (mediaRecorder && mediaRecorder.state !== 'inactive') mediaRecorder.stop();
+            if (mediaStream) { mediaStream.getTracks().forEach(t => t.stop()); mediaStream = null; }
+            if (ws && ws.readyState === WebSocket.OPEN) ws.send(JSON.stringify({ action: 'stop_announcement' }));
+            isBroadcasting = false;
+            document.getElementById('master-mic-btn').classList.remove('active');
+            document.getElementById('master-status').textContent = 'Pronto per trasmettere';
+            document.getElementById('master-status').classList.remove('broadcasting');
+        }
+
+        function sendCommand(action, data = {}) {
+            if (ws && ws.readyState === WebSocket.OPEN) ws.send(JSON.stringify({ action, ...data }));
+        }
+
+        // Data loading
+        async function apiCall(url, method = 'GET', body = null) {
+            const options = {
+                method,
+                headers: { 'Authorization': `Bearer ${token}`, 'Content-Type': 'application/json' }
+            };
+            if (body) options.body = JSON.stringify(body);
+            const resp = await fetch(`${API_BASE}${url}`, options);
+            if (!resp.ok) throw new Error('API error');
+            return resp.json();
+        }
+
+        async function loadGroups() {
+            groups = await apiCall('/api/groups');
+            sequences = await apiCall('/api/sequences');
+            if (currentGroupId) await loadAnnouncements(currentGroupId);
+            else renderGroups();
+        }
+
+        async function loadAnnouncements(groupId) {
+            currentGroupId = groupId;
+            announcements = await apiCall(`/api/announcements?group_id=${groupId}`);
+            renderAnnouncements();
+        }
+
+        function renderGroups() {
+            document.getElementById('button-container').innerHTML = groups.map(g => `
+                <button class="sound-btn" style="background:${g.color}" onclick="loadAnnouncements(${g.id})">
+                    <span class="icon">📁</span>${g.name}
+                </button>
+            `).join('');
+            document.getElementById('back-btn').classList.add('hidden');
+            document.getElementById('current-location').textContent = 'Gruppi';
+        }
+
+        function renderAnnouncements() {
+            const group = groups.find(g => g.id === currentGroupId);
+
+            // Get sequences for this group
+            const groupSequences = sequences.filter(s => s.group_id === currentGroupId);
+
+            // Render sequences first (with chain icon), then announcements
+            const sequenceButtons = groupSequences.map(s => `
+                <button class="sound-btn"
+                        style="background:${s.color};border:3px solid rgba(255,255,255,0.3);"
+                        onclick="playSequence(${s.id})">
+                    <span class="icon">🔗</span>${s.name}
+                </button>
+            `).join('');
+
+            const announcementButtons = announcements.map(a => `
+                <button class="sound-btn ${a.files.length === 0 ? 'disabled' : ''}"
+                        style="background:${a.color}"
+                        onclick="playAnnouncement(${a.id})"
+                        ${a.files.length === 0 ? 'disabled' : ''}>
+                    <span class="icon">${a.files.length > 0 ? '🔊' : '🔇'}</span>${a.name}
+                </button>
+            `).join('');
+
+            document.getElementById('button-container').innerHTML = sequenceButtons + announcementButtons;
+            document.getElementById('back-btn').classList.remove('hidden');
+            document.getElementById('current-location').textContent = group ? group.name : 'Annunci';
+        }
+
+        function goBack() { currentGroupId = null; renderGroups(); }
+
+        function playAnnouncement(id) {
+            const a = announcements.find(x => x.id === id);
+            if (!a || a.files.length === 0) return;
+
+            // Se clicco sullo stesso annuncio in riproduzione, lo stoppo
+            if (currentPlayingAnnouncementId === id && isPlaying) {
+                stopAudio();
+                currentPlayingAnnouncementId = null;
+                return;
+            }
+
+            currentPlayingAnnouncementId = id;
+            if (mode === 'player') {
+                audioQueue = a.files.map(f => `${API_BASE}/audio/announcements/${f}`);
+                playNextInQueue();
+            } else {
+                sendCommand('play_announcement', { id, files: a.files });
+            }
+        }
+
+        let currentPlayingSequenceId = null;
+
+        function playSequence(id) {
+            const seq = sequences.find(s => s.id === id);
+            if (!seq || seq.announcements.length === 0) return;
+
+            // Se clicco sulla stessa sequenza in riproduzione, la stoppo
+            if (currentPlayingSequenceId === id && isPlaying) {
+                stopAudio();
+                currentPlayingSequenceId = null;
+                return;
+            }
+
+            currentPlayingSequenceId = id;
+            currentPlayingAnnouncementId = null;
+
+            // Collect all files from all announcements in sequence
+            const allFiles = [];
+            seq.announcements.forEach(ann => {
+                ann.files.forEach(f => allFiles.push(f));
+            });
+
+            if (mode === 'player') {
+                audioQueue = allFiles.map(f => `${API_BASE}/audio/announcements/${f}`);
+                playNextInQueue();
+            } else {
+                sendCommand('play_announcement', { id: seq.id, files: allFiles, isSequence: true });
+            }
+        }
+
+        function showTab(tab) {
+            document.querySelectorAll('.nav-tab').forEach(t => t.classList.remove('active'));
+            event.target.classList.add('active');
+            document.getElementById('tab-soundboard').classList.add('hidden');
+            document.getElementById('tab-music').classList.add('hidden');
+            document.getElementById('tab-admin').classList.add('hidden');
+            document.getElementById(`tab-${tab}`).classList.remove('hidden');
+            if (tab === 'admin') loadAdminData();
+        }
+
+        async function loadAdminData() {
+            groups = await apiCall('/api/groups');
+            announcements = await apiCall('/api/announcements');
+            sequences = await apiCall('/api/sequences');
+            const users = await apiCall('/api/users');
+            renderAdminGroups();
+            renderAdminAnnouncements();
+            renderAdminSequences();
+            renderAdminUsers(users);
+            updateBulkGroupSelect();
+            updateTTSGroupSelect();
+        }
+
+        function updateTTSGroupSelect() {
+            document.getElementById('tts-group').innerHTML = groups.map(g =>
+                `<option value="${g.id}">${g.name}</option>`
+            ).join('');
+        }
+
+        function renderAdminGroups() {
+            document.getElementById('groups-list').innerHTML = groups.map(g => `
+                <div class="item-row">
+                    <span style="color:${g.color}">■</span> ${g.name}
+                    <div><button class="btn-delete" onclick="deleteGroup(${g.id})">Elimina</button></div>
+                </div>
+            `).join('');
+        }
+
+        function renderAdminAnnouncements() {
+            document.getElementById('announcements-list').innerHTML = announcements.map(a => {
+                const group = groups.find(g => g.id === a.group_id);
+                const hasFiles = a.files.length > 0;
+                return `
+                <div class="item-row">
+                    <span style="color:${a.color}">■</span> ${a.name}
+                    <small style="color:#888;margin-left:10px;">(${group ? group.name : '?'}) - ${a.files.length} file</small>
+                    <div>
+                        ${hasFiles ? `<button class="btn-upload" onclick="openPreviewModal(${a.id}, '${a.name.replace(/'/g, "\\'")}', ${JSON.stringify(a.files).replace(/"/g, '&quot;')})">▶️ Anteprima</button>` : ''}
+                        <button class="btn-edit" onclick="openMoveModal(${a.id}, '${a.name.replace(/'/g, "\\'")}', ${a.group_id})">📁 Sposta</button>
+                        <button class="btn-delete" onclick="deleteAnnouncement(${a.id})">Elimina</button>
+                    </div>
+                </div>
+            `}).join('');
+        }
+
+        function renderAdminUsers(users) {
+            document.getElementById('users-list').innerHTML = users.map(u => `
+                <div class="item-row">
+                    ${u.username} (${u.role})
+                    <div>${u.username !== 'admin' ? `<button class="btn-delete" onclick="deleteUser(${u.id})">Elimina</button>` : ''}</div>
+                </div>
+            `).join('');
+        }
+
+        function updateBulkGroupSelect() {
+            document.getElementById('bulk-target-group').innerHTML = groups.map(g => 
+                `<option value="${g.id}">${g.name}</option>`
+            ).join('');
+        }
+
+        // Modals
+        function openGroupModal() {
+            document.getElementById('modal-group-name').value = '';
+            document.getElementById('modal-group-color').value = '#3B82F6';
+            document.getElementById('modal-group').classList.remove('hidden');
+        }
+
+        function openAnnouncementModal() {
+            document.getElementById('modal-announcement-name').value = '';
+            document.getElementById('modal-announcement-color').value = '#10B981';
+            document.getElementById('modal-announcement-group').innerHTML = groups.map(g => 
+                `<option value="${g.id}">${g.name}</option>`
+            ).join('');
+            document.getElementById('modal-announcement').classList.remove('hidden');
+        }
+
+        function openUserModal() {
+            document.getElementById('modal-user-name').value = '';
+            document.getElementById('modal-user-pass').value = '';
+            document.getElementById('modal-user-role').value = 'operator';
+            document.getElementById('modal-user').classList.remove('hidden');
+        }
+
+        function openUploadModal(announcementId, announcementName) {
+            currentUploadAnnouncementId = announcementId;
+            document.getElementById('modal-upload-announcement-name').textContent = announcementName;
+            document.getElementById('modal-upload-file').value = '';
+            document.getElementById('file-preview').classList.add('hidden');
+            resetRecordingUI();
+            switchUploadTab('file', document.querySelector('.upload-tab'));
+            document.getElementById('modal-upload').classList.remove('hidden');
+        }
+
+        function switchUploadTab(tab, btn) {
+            document.querySelectorAll('.upload-tab').forEach(t => t.classList.remove('active'));
+            if (btn) btn.classList.add('active');
+            document.querySelectorAll('.upload-content').forEach(c => c.classList.remove('active'));
+            document.getElementById(`upload-tab-${tab}`).classList.add('active');
+            if (isRecordingAnnouncement) stopRecordingAnnouncement();
+        }
+
+        function closeModal(type) {
+            document.getElementById(`modal-${type}`).classList.add('hidden');
+            if (type === 'upload') {
+                if (isRecordingAnnouncement) stopRecordingAnnouncement();
+                if (recordingStream) { recordingStream.getTracks().forEach(t => t.stop()); recordingStream = null; }
+                resetRecordingUI();
+            }
+        }
+
+        async function saveGroup() {
+            const name = document.getElementById('modal-group-name').value;
+            const color = document.getElementById('modal-group-color').value;
+            if (!name) return alert('Inserisci un nome');
+            await apiCall('/api/groups', 'POST', { name, color });
+            closeModal('group');
+            loadAdminData();
+        }
+
+        async function saveAnnouncement() {
+            const name = document.getElementById('modal-announcement-name').value;
+            const group_id = parseInt(document.getElementById('modal-announcement-group').value);
+            const color = document.getElementById('modal-announcement-color').value;
+            if (!name) return alert('Inserisci un nome');
+            await apiCall('/api/announcements', 'POST', { name, group_id, color });
+            closeModal('announcement');
+            loadAdminData();
+        }
+
+        async function saveUser() {
+            const u = document.getElementById('modal-user-name').value;
+            const p = document.getElementById('modal-user-pass').value;
+            const r = document.getElementById('modal-user-role').value;
+            if (!u || !p) return alert('Compila tutti i campi');
+            await apiCall('/api/users', 'POST', { username: u, password: p, role: r });
+            closeModal('user');
+            loadAdminData();
+        }
+
+        function previewUploadFile() {
+            const file = document.getElementById('modal-upload-file').files[0];
+            if (!file) { document.getElementById('file-preview').classList.add('hidden'); return; }
+            document.getElementById('file-preview-name').textContent = file.name;
+            const audio = document.getElementById('file-preview-audio');
+            if (audio.src) URL.revokeObjectURL(audio.src);
+            audio.src = URL.createObjectURL(file);
+            document.getElementById('file-preview').classList.remove('hidden');
+        }
+
+        async function saveUpload() {
+            const file = document.getElementById('modal-upload-file').files[0];
+            if (!file) return alert('Seleziona un file');
+            const formData = new FormData();
+            formData.append('file', file);
+            await fetch(`${API_BASE}/api/announcements/${currentUploadAnnouncementId}/files`, {
+                method: 'POST',
+                headers: { 'Authorization': `Bearer ${token}` },
+                body: formData
+            });
+            closeModal('upload');
+            loadAdminData();
+            alert('File caricato!');
+        }
+
+        async function deleteGroup(id) {
+            if (!confirm('Eliminare questo gruppo e tutti i suoi annunci?')) return;
+            await apiCall(`/api/groups/${id}`, 'DELETE');
+            loadAdminData();
+        }
+
+        async function deleteAnnouncement(id) {
+            if (!confirm('Eliminare questo annuncio?')) return;
+            await apiCall(`/api/announcements/${id}`, 'DELETE');
+            loadAdminData();
+        }
+
+        async function deleteUser(id) {
+            if (!confirm('Eliminare questo utente?')) return;
+            await apiCall(`/api/users/${id}`, 'DELETE');
+            loadAdminData();
+        }
+
+        // Preview e Move functions
+        function openPreviewModal(announcementId, announcementName, files) {
+            document.getElementById('modal-preview-name').textContent = announcementName;
+            const filesList = document.getElementById('preview-files-list');
+            if (files.length === 0) {
+                filesList.innerHTML = '<p style="color:#94a3b8;">Nessun file audio</p>';
+            } else {
+                filesList.innerHTML = files.map((f, i) => `
+                    <div style="background:rgba(255,255,255,0.05);padding:10px;border-radius:8px;margin-bottom:10px;">
+                        <div style="font-size:0.9em;color:#94a3b8;margin-bottom:5px;">📄 ${f}</div>
+                        <audio controls style="width:100%;" src="${API_BASE}/audio/announcements/${encodeURIComponent(f)}"></audio>
+                    </div>
+                `).join('');
+            }
+            document.getElementById('modal-preview').classList.remove('hidden');
+        }
+
+        function openMoveModal(announcementId, announcementName, currentGroupId) {
+            document.getElementById('modal-move-name').textContent = announcementName;
+            document.getElementById('modal-move-id').value = announcementId;
+            document.getElementById('modal-move-group').innerHTML = groups.map(g =>
+                `<option value="${g.id}" ${g.id === currentGroupId ? 'selected' : ''}>${g.name}</option>`
+            ).join('');
+            document.getElementById('modal-move').classList.remove('hidden');
+        }
+
+        async function moveAnnouncement() {
+            const id = parseInt(document.getElementById('modal-move-id').value);
+            const newGroupId = parseInt(document.getElementById('modal-move-group').value);
+            try {
+                await apiCall(`/api/announcements/move`, 'PUT', { announcement_id: id, new_group_id: newGroupId });
+                closeModal('move');
+                loadAdminData();
+                alert('Annuncio spostato!');
+            } catch (e) {
+                alert('Errore durante lo spostamento: ' + e.message);
+            }
+        }
+
+        // Sequences functions
+        function renderAdminSequences() {
+            const list = document.getElementById('sequences-list');
+            if (sequences.length === 0) {
+                list.innerHTML = '<p style="color:#94a3b8;padding:10px;">Nessuna sequenza creata</p>';
+                return;
+            }
+            list.innerHTML = sequences.map(s => {
+                const group = groups.find(g => g.id === s.group_id);
+                const annNames = s.announcements.map(a => a.name).join(' → ');
+                return `
+                <div class="item-row">
+                    <div>
+                        <span style="color:${s.color}">🔗</span> <strong>${s.name}</strong>
+                        <small style="color:#888;margin-left:10px;">(${group ? group.name : '?'})</small>
+                        <div style="font-size:0.8em;color:#94a3b8;margin-top:3px;">${annNames || 'Nessun annuncio'}</div>
+                    </div>
+                    <div>
+                        <button class="btn-edit" onclick="editSequence(${s.id})">✏️ Modifica</button>
+                        <button class="btn-delete" onclick="deleteSequence(${s.id})">Elimina</button>
+                    </div>
+                </div>
+            `}).join('');
+        }
+
+        function openSequenceModal(editId = null) {
+            selectedSequenceAnnouncements = [];
+            sequenceUploadFiles = [];
+            sequenceUploadMode = 'existing';
+            document.getElementById('modal-sequence-name').value = '';
+            document.getElementById('modal-sequence-color').value = '#8B5CF6';
+            document.getElementById('modal-sequence-id').value = '';
+            document.getElementById('modal-sequence-title').textContent = '🔗 Nuova Sequenza';
+            document.getElementById('sequence-files-list').innerHTML = '';
+            document.getElementById('sequence-files-input').value = '';
+
+            // Reset tabs
+            document.querySelectorAll('#modal-sequence .upload-tab').forEach(t => t.classList.remove('active'));
+            document.querySelector('#modal-sequence .upload-tab').classList.add('active');
+            document.getElementById('seq-tab-existing').classList.remove('hidden');
+            document.getElementById('seq-tab-upload').classList.add('hidden');
+
+            // Populate groups dropdown
+            document.getElementById('modal-sequence-group').innerHTML = groups.map(g =>
+                `<option value="${g.id}">${g.name}</option>`
+            ).join('');
+
+            if (editId) {
+                const seq = sequences.find(s => s.id === editId);
+                if (seq) {
+                    document.getElementById('modal-sequence-name').value = seq.name;
+                    document.getElementById('modal-sequence-color').value = seq.color;
+                    document.getElementById('modal-sequence-group').value = seq.group_id;
+                    document.getElementById('modal-sequence-id').value = seq.id;
+                    document.getElementById('modal-sequence-title').textContent = '🔗 Modifica Sequenza';
+                    selectedSequenceAnnouncements = seq.announcements.map(a => a.id);
+                }
+            }
+
+            updateSequenceAnnouncementLists();
+            document.getElementById('modal-sequence').classList.remove('hidden');
+        }
+
+        function editSequence(id) {
+            openSequenceModal(id);
+        }
+
+        function updateSequenceAnnouncementLists() {
+            const availableDiv = document.getElementById('sequence-available');
+            const selectedDiv = document.getElementById('sequence-selected');
+
+            // Filter announcements that have files
+            const availableAnns = announcements.filter(a => a.files.length > 0 && !selectedSequenceAnnouncements.includes(a.id));
+            const selectedAnns = selectedSequenceAnnouncements.map(id => announcements.find(a => a.id === id)).filter(Boolean);
+
+            availableDiv.innerHTML = availableAnns.map(a => `
+                <button type="button" onclick="addToSequence(${a.id})"
+                        style="background:${a.color};color:#fff;border:none;padding:8px 12px;border-radius:8px;cursor:pointer;font-size:0.9em;">
+                    + ${a.name}
+                </button>
+            `).join('') || '<span style="color:#94a3b8;">Nessun annuncio disponibile</span>';
+
+            selectedDiv.innerHTML = selectedAnns.map((a, i) => `
+                <div style="background:${a.color};color:#fff;padding:8px 12px;border-radius:8px;display:flex;align-items:center;gap:8px;">
+                    <span style="background:rgba(0,0,0,0.3);padding:2px 6px;border-radius:4px;font-size:0.8em;">${i+1}</span>
+                    ${a.name}
+                    <button type="button" onclick="removeFromSequence(${a.id})"
+                            style="background:rgba(0,0,0,0.3);border:none;color:#fff;padding:2px 6px;border-radius:4px;cursor:pointer;">✕</button>
+                </div>
+            `).join('') || '<span style="color:#8B5CF6;">Clicca sugli annunci sopra per aggiungerli</span>';
+        }
+
+        function addToSequence(annId) {
+            if (!selectedSequenceAnnouncements.includes(annId)) {
+                selectedSequenceAnnouncements.push(annId);
+                updateSequenceAnnouncementLists();
+            }
+        }
+
+        function removeFromSequence(annId) {
+            selectedSequenceAnnouncements = selectedSequenceAnnouncements.filter(id => id !== annId);
+            updateSequenceAnnouncementLists();
+        }
+
+        function switchSequenceTab(tab, btn) {
+            sequenceUploadMode = tab;
+            document.querySelectorAll('#modal-sequence .upload-tab').forEach(t => t.classList.remove('active'));
+            if (btn) btn.classList.add('active');
+            document.getElementById('seq-tab-existing').classList.toggle('hidden', tab !== 'existing');
+            document.getElementById('seq-tab-upload').classList.toggle('hidden', tab !== 'upload');
+        }
+
+        function handleSequenceFileSelect(event) {
+            const files = Array.from(event.target.files).filter(f => f.type.startsWith('audio/'));
+            addSequenceFiles(files);
+        }
+
+        function handleSequenceFileDrop(event) {
+            event.preventDefault();
+            event.target.style.background = 'rgba(139,92,246,0.1)';
+            const files = Array.from(event.dataTransfer.files).filter(f => f.type.startsWith('audio/'));
+            addSequenceFiles(files);
+        }
+
+        function addSequenceFiles(files) {
+            // Sort files alphabetically by name
+            files.sort((a, b) => a.name.localeCompare(b.name));
+            sequenceUploadFiles = [...sequenceUploadFiles, ...files];
+            // Remove duplicates
+            sequenceUploadFiles = sequenceUploadFiles.filter((f, i, arr) =>
+                arr.findIndex(x => x.name === f.name) === i
+            );
+            sequenceUploadFiles.sort((a, b) => a.name.localeCompare(b.name));
+            renderSequenceFilesList();
+        }
+
+        function removeSequenceFile(index) {
+            sequenceUploadFiles.splice(index, 1);
+            renderSequenceFilesList();
+        }
+
+        function renderSequenceFilesList() {
+            const list = document.getElementById('sequence-files-list');
+            if (sequenceUploadFiles.length === 0) {
+                list.innerHTML = '<p style="color:#94a3b8;text-align:center;padding:10px;">Nessun file selezionato</p>';
+                return;
+            }
+            list.innerHTML = sequenceUploadFiles.map((f, i) => `
+                <div style="display:flex;align-items:center;gap:10px;padding:8px;background:rgba(139,92,246,0.1);border-radius:8px;margin-bottom:5px;">
+                    <span style="background:#8B5CF6;color:#fff;padding:2px 8px;border-radius:4px;font-size:0.8em;">${i+1}</span>
+                    <span style="flex:1;overflow:hidden;text-overflow:ellipsis;white-space:nowrap;">${f.name}</span>
+                    <button type="button" onclick="removeSequenceFile(${i})" style="background:#EF4444;border:none;color:#fff;padding:4px 8px;border-radius:4px;cursor:pointer;">✕</button>
+                </div>
+            `).join('');
+        }
+
+        async function saveSequence() {
+            const name = document.getElementById('modal-sequence-name').value.trim();
+            const groupId = parseInt(document.getElementById('modal-sequence-group').value);
+            const color = document.getElementById('modal-sequence-color').value;
+            const editId = document.getElementById('modal-sequence-id').value;
+
+            if (!name) return alert('Inserisci un nome per la sequenza');
+
+            try {
+                if (sequenceUploadMode === 'upload' && sequenceUploadFiles.length > 0) {
+                    // Upload mode: create announcements from files, then create sequence
+                    if (sequenceUploadFiles.length < 2) return alert('Carica almeno 2 file per la sequenza');
+
+                    const createdAnnouncementIds = [];
+
+                    for (const file of sequenceUploadFiles) {
+                        // Create announcement with file name (without extension)
+                        const annName = file.name.replace(/\.[^/.]+$/, '');
+                        const ann = await apiCall('/api/announcements', 'POST', {
+                            name: annName,
+                            group_id: groupId,
+                            color: color
+                        });
+
+                        // Upload file to the announcement
+                        const formData = new FormData();
+                        formData.append('file', file);
+                        await fetch(`${API_BASE}/api/announcements/${ann.id}/files`, {
+                            method: 'POST',
+                            headers: { 'Authorization': `Bearer ${token}` },
+                            body: formData
+                        });
+
+                        createdAnnouncementIds.push(ann.id);
+                    }
+
+                    // Create the sequence with the new announcements
+                    await apiCall('/api/sequences', 'POST', {
+                        name, group_id: groupId, color, announcement_ids: createdAnnouncementIds
+                    });
+
+                    closeModal('sequence');
+                    loadAdminData();
+                    alert(`Sequenza creata con ${createdAnnouncementIds.length} nuovi annunci!`);
+
+                } else {
+                    // Existing announcements mode
+                    if (selectedSequenceAnnouncements.length < 2) return alert('Seleziona almeno 2 annunci per la sequenza');
+
+                    if (editId) {
+                        await apiCall(`/api/sequences/${editId}`, 'PUT', {
+                            name, color, announcement_ids: selectedSequenceAnnouncements
+                        });
+                    } else {
+                        await apiCall('/api/sequences', 'POST', {
+                            name, group_id: groupId, color, announcement_ids: selectedSequenceAnnouncements
+                        });
+                    }
+                    closeModal('sequence');
+                    loadAdminData();
+                    alert(editId ? 'Sequenza modificata!' : 'Sequenza creata!');
+                }
+            } catch (e) {
+                alert('Errore: ' + e.message);
+            }
+        }
+
+        async function deleteSequence(id) {
+            if (!confirm('Eliminare questa sequenza?')) return;
+            await apiCall(`/api/sequences/${id}`, 'DELETE');
+            loadAdminData();
+        }
+
+        // TTS Generation
+        async function generateTTS() {
+            const name = document.getElementById('tts-name').value.trim();
+            const text = document.getElementById('tts-text').value.trim();
+            const groupId = parseInt(document.getElementById('tts-group').value);
+            const gender = document.querySelector('input[name="tts-gender"]:checked').value;
+            const createSequence = document.getElementById('tts-create-sequence').checked;
+
+            // Get selected languages in order
+            const languages = [];
+            document.querySelectorAll('#tts-languages input:checked').forEach(cb => {
+                languages.push(cb.value);
+            });
+
+            if (!name) return alert('Inserisci un nome per l\'annuncio');
+            if (!text) return alert('Inserisci il testo da pronunciare');
+            if (languages.length === 0) return alert('Seleziona almeno una lingua');
+
+            // Show progress
+            document.getElementById('tts-progress').classList.remove('hidden');
+            document.getElementById('tts-status').textContent = `Generazione in corso... (${languages.length} lingue)`;
+
+            try {
+                const result = await apiCall('/api/tts/generate', 'POST', {
+                    text: text,
+                    languages: languages,
+                    voice_gender: gender,
+                    group_id: groupId,
+                    announcement_name: name,
+                    create_sequence: createSequence
+                });
+
+                document.getElementById('tts-progress').classList.add('hidden');
+
+                if (result.success) {
+                    alert(result.message);
+                    // Clear form
+                    document.getElementById('tts-name').value = '';
+                    document.getElementById('tts-text').value = '';
+                    loadAdminData();
+                }
+            } catch (e) {
+                document.getElementById('tts-progress').classList.add('hidden');
+                alert('Errore: ' + e.message);
+            }
+        }
+
+        // Recording
+        async function toggleRecording() {
+            if (isRecordingAnnouncement) stopRecordingAnnouncement();
+            else startRecordingAnnouncement();
+        }
+
+        async function startRecordingAnnouncement() {
+            try {
+                recordingStream = await navigator.mediaDevices.getUserMedia({ 
+                    audio: { echoCancellation: true, noiseSuppression: true, autoGainControl: true }
+                });
+                let mimeType = 'audio/webm;codecs=opus';
+                if (!MediaRecorder.isTypeSupported(mimeType)) mimeType = 'audio/webm';
+                announcementRecorder = new MediaRecorder(recordingStream, mimeType ? { mimeType } : {});
+                recordedChunks = [];
+                announcementRecorder.ondataavailable = (e) => { if (e.data.size > 0) recordedChunks.push(e.data); };
+                announcementRecorder.onstop = () => {
+                    if (recordingStream) recordingStream.getTracks().forEach(t => t.stop());
+                    recordedBlob = new Blob(recordedChunks, { type: announcementRecorder.mimeType || 'audio/webm' });
+                    showRecordingPreview();
+                };
+                announcementRecorder.start(100);
+                isRecordingAnnouncement = true;
+                recordingStartTime = Date.now();
+                document.getElementById('record-btn').classList.add('recording');
+                document.getElementById('record-btn').textContent = '⏹️';
+                document.getElementById('record-status').textContent = 'Registrazione in corso...';
+                document.getElementById('record-status').classList.add('recording');
+                document.getElementById('record-timer').classList.remove('hidden');
+                recordingTimerInterval = setInterval(updateRecordingTimer, 100);
+            } catch (e) { alert('Errore accesso microfono: ' + e.message); }
+        }
+
+        function stopRecordingAnnouncement() {
+            if (announcementRecorder && announcementRecorder.state !== 'inactive') announcementRecorder.stop();
+            isRecordingAnnouncement = false;
+            clearInterval(recordingTimerInterval);
+            document.getElementById('record-btn').classList.remove('recording');
+            document.getElementById('record-btn').textContent = '🎙️';
+            document.getElementById('record-status').textContent = 'Registrazione completata';
+            document.getElementById('record-status').classList.remove('recording');
+        }
+
+        function updateRecordingTimer() {
+            const elapsed = Math.floor((Date.now() - recordingStartTime) / 1000);
+            document.getElementById('record-timer').textContent = `${Math.floor(elapsed/60)}:${(elapsed%60).toString().padStart(2,'0')}`;
+        }
+
+        function showRecordingPreview() {
+            const audio = document.getElementById('record-audio-preview');
+            if (audio.src && audio.src.startsWith('blob:')) URL.revokeObjectURL(audio.src);
+            audio.src = URL.createObjectURL(recordedBlob);
+            document.getElementById('record-preview').classList.remove('hidden');
+        }
+
+        function discardRecording() { recordedBlob = null; recordedChunks = []; resetRecordingUI(); }
+
+        function resetRecordingUI() {
+            document.getElementById('record-btn').classList.remove('recording');
+            document.getElementById('record-btn').textContent = '🎙️';
+            document.getElementById('record-status').textContent = 'Premi per registrare';
+            document.getElementById('record-status').classList.remove('recording');
+            document.getElementById('record-timer').classList.add('hidden');
+            document.getElementById('record-timer').textContent = '0:00';
+            document.getElementById('record-preview').classList.add('hidden');
+            const audio = document.getElementById('record-audio-preview');
+            if (audio.src && audio.src.startsWith('blob:')) URL.revokeObjectURL(audio.src);
+            audio.src = '';
+            recordedBlob = null;
+            recordedChunks = [];
+        }
+
+        async function saveRecording() {
+            if (!recordedBlob) return alert('Nessuna registrazione');
+            const ext = recordedBlob.type.includes('webm') ? 'webm' : 'm4a';
+            const formData = new FormData();
+            formData.append('file', recordedBlob, `recording_${Date.now()}.${ext}`);
+            await fetch(`${API_BASE}/api/announcements/${currentUploadAnnouncementId}/files`, {
+                method: 'POST',
+                headers: { 'Authorization': `Bearer ${token}` },
+                body: formData
+            });
+            closeModal('upload');
+            loadAdminData();
+            alert('Registrazione salvata!');
+        }
+
+        // Bulk Upload
+        function handleDragOver(e) {
+            e.preventDefault();
+            e.stopPropagation();
+            document.getElementById('bulk-upload-zone').classList.add('dragover');
+        }
+
+        function handleDragLeave(e) {
+            e.preventDefault();
+            e.stopPropagation();
+            document.getElementById('bulk-upload-zone').classList.remove('dragover');
+        }
+
+        function handleDrop(e) {
+            e.preventDefault();
+            e.stopPropagation();
+            document.getElementById('bulk-upload-zone').classList.remove('dragover');
+            const files = Array.from(e.dataTransfer.files).filter(f => f.type.startsWith('audio/'));
+            addBulkFiles(files);
+        }
+
+        function handleFileSelect(e) {
+            const files = Array.from(e.target.files);
+            addBulkFiles(files);
+            e.target.value = '';
+        }
+
+        function addBulkFiles(files) {
+            bulkFiles = bulkFiles.concat(files);
+            renderBulkFileList();
+            if (bulkFiles.length > 0) {
+                document.getElementById('bulk-file-list').classList.remove('hidden');
+                document.getElementById('bulk-group-select').classList.remove('hidden');
+                document.getElementById('bulk-upload-actions').classList.remove('hidden');
+            }
+        }
+
+        function renderBulkFileList() {
+            document.getElementById('bulk-file-list').innerHTML = bulkFiles.map((f, i) => `
+                <div class="file-item">
+                    <span class="file-name">🎵 ${f.name}</span>
+                    <span class="file-size">${(f.size / 1024 / 1024).toFixed(2)} MB</span>
+                    <button class="remove-btn" onclick="removeBulkFile(${i})">✕</button>
+                </div>
+            `).join('');
+        }
+
+        function removeBulkFile(index) {
+            bulkFiles.splice(index, 1);
+            renderBulkFileList();
+            if (bulkFiles.length === 0) clearBulkUpload();
+        }
+
+        function clearBulkUpload() {
+            bulkFiles = [];
+            document.getElementById('bulk-file-list').innerHTML = '';
+            document.getElementById('bulk-file-list').classList.add('hidden');
+            document.getElementById('bulk-group-select').classList.add('hidden');
+            document.getElementById('bulk-upload-actions').classList.add('hidden');
+            document.getElementById('bulk-upload-progress').classList.add('hidden');
+        }
+
+        async function executeBulkUpload() {
+            if (bulkFiles.length === 0) return alert('Nessun file selezionato');
+            if (groups.length === 0) return alert('Crea prima un gruppo');
+
+            const groupId = document.getElementById('bulk-target-group').value;
+
+            document.getElementById('bulk-upload-actions').classList.add('hidden');
+            document.getElementById('bulk-upload-progress').classList.remove('hidden');
+
+            const formData = new FormData();
+            formData.append('group_id', groupId);
+            bulkFiles.forEach(f => formData.append('files', f));
+
+            try {
+                document.getElementById('bulk-upload-status').textContent = `Caricamento di ${bulkFiles.length} file...`;
+                document.getElementById('bulk-progress-fill').style.width = '50%';
+
+                const resp = await fetch(`${API_BASE}/api/announcements/bulk-upload`, {
+                    method: 'POST',
+                    headers: { 'Authorization': `Bearer ${token}` },
+                    body: formData
+                });
+
+                if (!resp.ok) throw new Error('Errore upload');
+
+                const result = await resp.json();
+                document.getElementById('bulk-progress-fill').style.width = '100%';
+                document.getElementById('bulk-upload-status').textContent = `✅ Creati ${result.created} annunci!`;
+
+                setTimeout(() => {
+                    clearBulkUpload();
+                    loadAdminData();
+                }, 1500);
+
+            } catch (e) {
+                document.getElementById('bulk-upload-status').textContent = '❌ Errore: ' + e.message;
+                document.getElementById('bulk-upload-actions').classList.remove('hidden');
+            }
+        }
+
+        // ============== MUSIC PLAYER ==============
+        let musicTracks = [];
+        let playlists = [];
+        let currentPlaylist = null;
+        let currentPlaylistTracks = [];
+        let currentMusicIndex = 0;
+        let isMusicPlaying = false;
+        let isMusicShuffle = false;
+        let isMusicRepeat = false;  // Ripeti brano singolo
+        let isMusicLoopPlaylist = false;  // Loop intera playlist
+        let selectedPlaylistTracks = [];
+        const musicPlayer = document.getElementById('music-audio-player');
+
+        // Load music data
+        async function loadMusicData() {
+            try {
+                musicTracks = await apiCall('/api/music');
+                playlists = await apiCall('/api/playlists');
+                renderPlaylists();
+                renderMusicTracks();
+            } catch (e) {
+                console.error('Error loading music:', e);
+            }
+        }
+
+        // Render playlists
+        function renderPlaylists() {
+            const container = document.getElementById('playlists-container');
+            if (playlists.length === 0) {
+                container.innerHTML = '<p style="color:#94a3b8;grid-column:1/-1;">Nessuna playlist. Creane una!</p>';
+                return;
+            }
+            container.innerHTML = playlists.map(pl => `
+                <div style="background:linear-gradient(135deg,#EC4899,#6366F1);border-radius:15px;padding:20px;cursor:pointer;transition:transform 0.2s;"
+                     onclick="playPlaylist(${pl.id})"
+                     onmouseover="this.style.transform='scale(1.02)'"
+                     onmouseout="this.style.transform='scale(1)'">
+                    <div style="font-size:2em;margin-bottom:10px;">🎵</div>
+                    <div style="font-weight:bold;margin-bottom:5px;">${pl.name}</div>
+                    <div style="font-size:0.85em;opacity:0.8;">${pl.tracks.length} brani</div>
+                    ${userRole === 'admin' ? `
+                    <div style="margin-top:10px;display:flex;gap:5px;" onclick="event.stopPropagation();">
+                        <button onclick="editPlaylist(${pl.id})" style="padding:5px 10px;border:none;border-radius:5px;background:rgba(255,255,255,0.2);color:#fff;cursor:pointer;font-size:0.8em;">✏️</button>
+                        <button onclick="deletePlaylist(${pl.id})" style="padding:5px 10px;border:none;border-radius:5px;background:rgba(255,255,255,0.2);color:#fff;cursor:pointer;font-size:0.8em;">🗑️</button>
+                    </div>
+                    ` : ''}
+                </div>
+            `).join('');
+        }
+
+        // Render music tracks list
+        function renderMusicTracks() {
+            document.getElementById('music-count').textContent = musicTracks.length;
+            const list = document.getElementById('music-tracks-list');
+            if (musicTracks.length === 0) {
+                list.innerHTML = '<p style="color:#94a3b8;padding:10px;">Nessun brano caricato</p>';
+                return;
+            }
+            list.innerHTML = musicTracks.map(t => `
+                <div class="item-row">
+                    <div style="display:flex;align-items:center;gap:10px;">
+                        <button onclick="playSingleTrack(${t.id})" style="width:35px;height:35px;border-radius:50%;border:none;background:#EC4899;color:#fff;cursor:pointer;">▶️</button>
+                        <div>
+                            <div style="font-weight:500;">${t.title}</div>
+                            <div style="font-size:0.85em;color:#94a3b8;">${t.artist || 'Artista sconosciuto'}</div>
+                        </div>
+                    </div>
+                    <div>
+                        <button class="btn-edit" onclick="editTrack(${t.id}, '${t.title.replace(/'/g, "\\'")}', '${(t.artist || '').replace(/'/g, "\\'")}')">✏️</button>
+                        <button class="btn-delete" onclick="deleteTrack(${t.id})">🗑️</button>
+                    </div>
+                </div>
+            `).join('');
+        }
+
+        // Play a playlist
+        function playPlaylist(playlistId) {
+            const pl = playlists.find(p => p.id === playlistId);
+            if (!pl || pl.tracks.length === 0) {
+                alert('Playlist vuota!');
+                return;
+            }
+            currentPlaylist = pl;
+            currentPlaylistTracks = [...pl.tracks];
+            if (isMusicShuffle) shuffleArray(currentPlaylistTracks);
+            currentMusicIndex = 0;
+
+            if (mode === 'player') {
+                playCurrentMusicTrack();
+            } else {
+                sendCommand('play_playlist', {
+                    playlist_id: playlistId,
+                    tracks: currentPlaylistTracks.map(t => t.file_path),
+                    shuffle: isMusicShuffle,
+                    loop: isMusicLoopPlaylist
+                });
+            }
+
+            // Mostra nome playlist nel player
+            document.getElementById('music-player-status').textContent = isMusicLoopPlaylist ? 'Loop attivo' : 'Riproduzione singola';
+            document.getElementById('music-current-playlist-name').style.display = 'block';
+            document.getElementById('music-playlist-name-text').textContent = pl.name;
+        }
+
+        // Play single track
+        function playSingleTrack(trackId) {
+            const track = musicTracks.find(t => t.id === trackId);
+            if (!track) return;
+            currentPlaylist = null;
+            currentPlaylistTracks = [track];
+            currentMusicIndex = 0;
+
+            if (mode === 'player') {
+                playCurrentMusicTrack();
+            } else {
+                sendCommand('play_music', { file: track.file_path });
+            }
+        }
+
+        // Play current music track
+        function playCurrentMusicTrack() {
+            if (currentPlaylistTracks.length === 0) return;
+            const track = currentPlaylistTracks[currentMusicIndex];
+            musicPlayer.src = `${API_BASE}/audio/music/${track.file_path}`;
+            musicPlayer.play().then(() => {
+                isMusicPlaying = true;
+                updateMusicUI();
+            }).catch(err => {
+                console.error('Music playback error:', err);
+            });
+        }
+
+        // Music player event handlers
+        if (musicPlayer) {
+            musicPlayer.onended = () => {
+                // Ripeti brano singolo
+                if (isMusicRepeat) {
+                    musicPlayer.currentTime = 0;
+                    musicPlayer.play();
+                    return;
+                }
+
+                // Passa al brano successivo se non siamo alla fine
+                if (currentMusicIndex < currentPlaylistTracks.length - 1) {
+                    currentMusicIndex++;
+                    playCurrentMusicTrack();
+                }
+                // Siamo alla fine della playlist
+                else if (isMusicLoopPlaylist && currentPlaylistTracks.length > 0) {
+                    // Loop playlist: ricomincia da capo
+                    currentMusicIndex = 0;
+                    if (isMusicShuffle) shuffleArray(currentPlaylistTracks);
+                    playCurrentMusicTrack();
+                } else {
+                    // Riproduzione singola: ferma
+                    isMusicPlaying = false;
+                    updateMusicUI();
+                    document.getElementById('music-player-status').textContent = 'Riproduzione terminata';
+                }
+            };
+
+            musicPlayer.ontimeupdate = () => {
+                if (musicPlayer.duration) {
+                    document.getElementById('music-progress-bar').style.width = `${(musicPlayer.currentTime / musicPlayer.duration) * 100}%`;
+                    document.getElementById('music-time-current').textContent = formatTime(musicPlayer.currentTime);
+                    document.getElementById('music-time-total').textContent = formatTime(musicPlayer.duration);
+                }
+            };
+        }
+
+        // Music controls
+        function musicPlayPause() {
+            if (currentPlaylistTracks.length === 0) return;
+            if (mode === 'player') {
+                if (isMusicPlaying) {
+                    musicPlayer.pause();
+                    isMusicPlaying = false;
+                } else {
+                    musicPlayer.play();
+                    isMusicPlaying = true;
+                }
+                updateMusicUI();
+            } else {
+                sendCommand(isMusicPlaying ? 'pause' : 'resume');
+                isMusicPlaying = !isMusicPlaying;
+                updateMusicUI();
+            }
+        }
+
+        function musicNext() {
+            if (currentPlaylistTracks.length === 0) return;
+            if (mode === 'player') {
+                currentMusicIndex = (currentMusicIndex + 1) % currentPlaylistTracks.length;
+                playCurrentMusicTrack();
+            } else {
+                sendCommand('music_next');
+            }
+        }
+
+        function musicPrev() {
+            if (currentPlaylistTracks.length === 0) return;
+            if (mode === 'player') {
+                currentMusicIndex = currentMusicIndex > 0 ? currentMusicIndex - 1 : currentPlaylistTracks.length - 1;
+                playCurrentMusicTrack();
+            } else {
+                sendCommand('music_prev');
+            }
+        }
+
+        function musicStop() {
+            if (mode === 'player') {
+                musicPlayer.pause();
+                musicPlayer.currentTime = 0;
+            } else {
+                sendCommand('stop');
+            }
+            isMusicPlaying = false;
+            currentPlaylistTracks = [];
+            currentPlaylist = null;
+            updateMusicUI();
+            document.getElementById('music-player-status').textContent = 'Nessuna playlist in riproduzione';
+            document.getElementById('music-current-playlist-name').style.display = 'none';
+        }
+
+        function seekMusic(event) {
+            if (!musicPlayer.duration) return;
+            const rect = event.target.getBoundingClientRect();
+            musicPlayer.currentTime = ((event.clientX - rect.left) / rect.width) * musicPlayer.duration;
+        }
+
+        function toggleMusicShuffle() {
+            isMusicShuffle = !isMusicShuffle;
+            document.getElementById('music-shuffle-btn').style.background = isMusicShuffle ? '#EC4899' : 'rgba(255,255,255,0.1)';
+            if (isMusicShuffle && currentPlaylistTracks.length > 1) {
+                const currentTrack = currentPlaylistTracks[currentMusicIndex];
+                shuffleArray(currentPlaylistTracks);
+                currentMusicIndex = currentPlaylistTracks.findIndex(t => t.id === currentTrack.id);
+            }
+        }
+
+        function toggleMusicRepeat() {
+            isMusicRepeat = !isMusicRepeat;
+            document.getElementById('music-repeat-btn').style.background = isMusicRepeat ? '#EC4899' : 'rgba(255,255,255,0.1)';
+        }
+
+        function toggleMusicLoop() {
+            isMusicLoopPlaylist = !isMusicLoopPlaylist;
+            document.getElementById('music-loop-btn').style.background = isMusicLoopPlaylist ? '#10B981' : 'rgba(255,255,255,0.1)';
+            // Aggiorna lo status
+            if (currentPlaylist) {
+                document.getElementById('music-player-status').textContent = isMusicLoopPlaylist ? 'Loop attivo' : 'Riproduzione singola';
+            }
+        }
+
+        function shuffleArray(array) {
+            for (let i = array.length - 1; i > 0; i--) {
+                const j = Math.floor(Math.random() * (i + 1));
+                [array[i], array[j]] = [array[j], array[i]];
+            }
+        }
+
+        function updateMusicUI() {
+            const playBtn = document.getElementById('music-play-pause-btn');
+            playBtn.textContent = isMusicPlaying ? '⏸️' : '▶️';
+
+            if (currentPlaylistTracks.length > 0) {
+                const track = currentPlaylistTracks[currentMusicIndex];
+                document.getElementById('music-track-title').textContent = track.title;
+                document.getElementById('music-track-artist').textContent = track.artist || 'Artista sconosciuto';
+                document.getElementById('music-playlist-info').textContent = `Brano ${currentMusicIndex + 1} / ${currentPlaylistTracks.length}`;
+            } else {
+                document.getElementById('music-track-title').textContent = 'Nessun brano';
+                document.getElementById('music-track-artist').textContent = '-';
+                document.getElementById('music-playlist-info').textContent = 'Brano 0 / 0';
+                document.getElementById('music-progress-bar').style.width = '0%';
+                document.getElementById('music-time-current').textContent = '0:00';
+                document.getElementById('music-time-total').textContent = '0:00';
+            }
+        }
+
+        // Music upload
+        function handleMusicDragOver(e) {
+            e.preventDefault();
+            document.getElementById('music-upload-zone').style.background = 'rgba(236,72,153,0.3)';
+        }
+
+        function handleMusicDragLeave(e) {
+            e.preventDefault();
+            document.getElementById('music-upload-zone').style.background = 'rgba(236,72,153,0.1)';
+        }
+
+        async function handleMusicDrop(e) {
+            e.preventDefault();
+            document.getElementById('music-upload-zone').style.background = 'rgba(236,72,153,0.1)';
+            const files = Array.from(e.dataTransfer.files).filter(f => f.type.startsWith('audio/'));
+            await uploadMusicFiles(files);
+        }
+
+        async function handleMusicFileSelect(e) {
+            const files = Array.from(e.target.files);
+            await uploadMusicFiles(files);
+            e.target.value = '';
+        }
+
+        async function uploadMusicFiles(files) {
+            if (files.length === 0) return;
+            const formData = new FormData();
+            files.forEach(f => formData.append('files', f));
+
+            try {
+                const resp = await fetch(`${API_BASE}/api/music/bulk-upload`, {
+                    method: 'POST',
+                    headers: { 'Authorization': `Bearer ${token}` },
+                    body: formData
+                });
+                if (!resp.ok) throw new Error('Upload failed');
+                const result = await resp.json();
+                alert(`Caricati ${result.created} brani!`);
+                loadMusicData();
+            } catch (e) {
+                alert('Errore upload: ' + e.message);
+            }
+        }
+
+        // Track management
+        function editTrack(id, title, artist) {
+            const newTitle = prompt('Titolo:', title);
+            if (newTitle === null) return;
+            const newArtist = prompt('Artista:', artist);
+            if (newArtist === null) return;
+            apiCall(`/api/music/${id}`, 'PUT', { title: newTitle, artist: newArtist })
+                .then(() => loadMusicData())
+                .catch(e => alert('Errore: ' + e.message));
+        }
+
+        async function deleteTrack(id) {
+            if (!confirm('Eliminare questo brano?')) return;
+            await apiCall(`/api/music/${id}`, 'DELETE');
+            loadMusicData();
+        }
+
+        // Playlist management
+        function openPlaylistModal(editId = null) {
+            selectedPlaylistTracks = [];
+            document.getElementById('modal-playlist-name').value = '';
+            document.getElementById('modal-playlist-id').value = '';
+            document.getElementById('modal-playlist-title').textContent = '📋 Nuova Playlist';
+
+            if (editId) {
+                const pl = playlists.find(p => p.id === editId);
+                if (pl) {
+                    document.getElementById('modal-playlist-name').value = pl.name;
+                    document.getElementById('modal-playlist-id').value = pl.id;
+                    document.getElementById('modal-playlist-title').textContent = '📋 Modifica Playlist';
+                    selectedPlaylistTracks = pl.tracks.map(t => t.id);
+                }
+            }
+
+            updatePlaylistTrackLists();
+            document.getElementById('modal-playlist').classList.remove('hidden');
+        }
+
+        function editPlaylist(id) {
+            openPlaylistModal(id);
+        }
+
+        function updatePlaylistTrackLists() {
+            const availableDiv = document.getElementById('playlist-available-tracks');
+            const selectedDiv = document.getElementById('playlist-selected-tracks');
+
+            const availableTracks = musicTracks.filter(t => !selectedPlaylistTracks.includes(t.id));
+            const selectedTracks = selectedPlaylistTracks.map(id => musicTracks.find(t => t.id === id)).filter(Boolean);
+
+            availableDiv.innerHTML = availableTracks.map(t => `
+                <button type="button" onclick="addTrackToPlaylist(${t.id})"
+                        style="background:#6366F1;color:#fff;border:none;padding:8px 12px;border-radius:8px;cursor:pointer;font-size:0.85em;">
+                    + ${t.title}
+                </button>
+            `).join('') || '<span style="color:#94a3b8;">Nessun brano disponibile</span>';
+
+            selectedDiv.innerHTML = selectedTracks.map((t, i) => `
+                <div style="background:#EC4899;color:#fff;padding:8px 12px;border-radius:8px;display:flex;align-items:center;gap:8px;">
+                    <span style="background:rgba(0,0,0,0.3);padding:2px 6px;border-radius:4px;font-size:0.8em;">${i+1}</span>
+                    ${t.title}
+                    <button type="button" onclick="removeTrackFromPlaylist(${t.id})"
+                            style="background:rgba(0,0,0,0.3);border:none;color:#fff;padding:2px 6px;border-radius:4px;cursor:pointer;">✕</button>
+                </div>
+            `).join('') || '<span style="color:#EC4899;">Clicca sui brani sopra per aggiungerli</span>';
+        }
+
+        function addTrackToPlaylist(trackId) {
+            if (!selectedPlaylistTracks.includes(trackId)) {
+                selectedPlaylistTracks.push(trackId);
+                updatePlaylistTrackLists();
+            }
+        }
+
+        function removeTrackFromPlaylist(trackId) {
+            selectedPlaylistTracks = selectedPlaylistTracks.filter(id => id !== trackId);
+            updatePlaylistTrackLists();
+        }
+
+        async function savePlaylist() {
+            const name = document.getElementById('modal-playlist-name').value.trim();
+            const editId = document.getElementById('modal-playlist-id').value;
+
+            if (!name) return alert('Inserisci un nome');
+            if (selectedPlaylistTracks.length === 0) return alert('Aggiungi almeno un brano');
+
+            try {
+                if (editId) {
+                    await apiCall(`/api/playlists/${editId}`, 'PUT', { name, track_ids: selectedPlaylistTracks });
+                } else {
+                    const pl = await apiCall('/api/playlists', 'POST', { name });
+                    await apiCall(`/api/playlists/${pl.id}`, 'PUT', { track_ids: selectedPlaylistTracks });
+                }
+                closeModal('playlist');
+                loadMusicData();
+                alert(editId ? 'Playlist modificata!' : 'Playlist creata!');
+            } catch (e) {
+                alert('Errore: ' + e.message);
+            }
+        }
+
+        async function deletePlaylist(id) {
+            if (!confirm('Eliminare questa playlist?')) return;
+            await apiCall(`/api/playlists/${id}`, 'DELETE');
+            loadMusicData();
+        }
+
+        // Update showTab to load music data
+        const originalShowTab = showTab;
+        showTab = function(tab) {
+            document.querySelectorAll('.nav-tab').forEach(t => t.classList.remove('active'));
+            event.target.classList.add('active');
+            document.getElementById('tab-soundboard').classList.add('hidden');
+            document.getElementById('tab-music').classList.add('hidden');
+            document.getElementById('tab-admin').classList.add('hidden');
+            document.getElementById(`tab-${tab}`).classList.remove('hidden');
+            if (tab === 'admin') loadAdminData();
+            if (tab === 'music') loadMusicData();
+        };
+
+        // Handle WebSocket music messages
+        const originalHandleWebSocketMessage = handleWebSocketMessage;
+        handleWebSocketMessage = function(data) {
+            switch(data.type) {
+                case 'play':
+                    if (mode === 'player') {
+                        if (data.content === 'music') {
+                            currentPlaylistTracks = [{ file_path: data.file, title: data.file, artist: '' }];
+                            currentMusicIndex = 0;
+                            playCurrentMusicTrack();
+                        } else {
+                            playAudio(data);
+                        }
+                    }
+                    break;
+                case 'play_playlist':
+                    if (mode === 'player') {
+                        currentPlaylistTracks = data.tracks.map((fp, i) => ({ file_path: fp, title: `Brano ${i+1}`, artist: '' }));
+                        if (data.shuffle) shuffleArray(currentPlaylistTracks);
+                        currentMusicIndex = 0;
+                        playCurrentMusicTrack();
+                    }
+                    break;
+                case 'music_next':
+                    if (mode === 'player') musicNext();
+                    break;
+                case 'music_prev':
+                    if (mode === 'player') musicPrev();
+                    break;
+                case 'stop':
+                    if (mode === 'player') {
+                        stopAudio();
+                        musicStop();
+                    }
+                    break;
+                case 'pause':
+                    if (mode === 'player') {
+                        audioPlayer.pause();
+                        musicPlayer.pause();
+                        isMusicPlaying = false;
+                        updateMusicUI();
+                    }
+                    break;
+                case 'resume':
+                    if (mode === 'player') {
+                        if (currentPlaylistTracks.length > 0) {
+                            musicPlayer.play();
+                            isMusicPlaying = true;
+                            updateMusicUI();
+                        }
+                    }
+                    break;
+                case 'master_start':
+                    if (mode !== 'master') {
+                        document.getElementById('master-overlay-user').textContent = `${data.username} sta parlando...`;
+                        document.getElementById('master-overlay').classList.remove('hidden');
+                        if (mode === 'player') {
+                            stopAudio();
+                            musicPlayer.pause();
+                            isMusicPlaying = false;
+                            updateMusicUI();
+                        }
+                    }
+                    break;
+                case 'master_stop':
+                    document.getElementById('master-overlay').classList.add('hidden');
+                    break;
+                case 'blocked':
+                    alert('Annuncio master in corso - attendere');
+                    break;
+                case 'player_status':
+                    break;
+            }
+        };
+    </script>
+</body>
+</html>
