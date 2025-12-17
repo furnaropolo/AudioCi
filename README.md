@@ -1,198 +1,62 @@
 # AudioCi
 
-Sistema web-based per la gestione degli annunci audio in qualsiasi ambiente (hotel, negozi, uffici, navi, ecc.).
+Web-based audio announcement system with soundboard UI, real-time sync, and multi-user support.
 
-## Cosa fa
+## Descrizione
 
-- **Soundboard a tasti** per riprodurre annunci audio
-- **Architettura Player/Controller** - il Player riproduce, i Controller comandano
-- **Gestione gruppi e annunci** con interfaccia intuitiva
-- **Upload MP3** direttamente dal browser
-- **Multi-utente** con ruoli Admin e Operatore
-- **Comunicazione real-time** via WebSocket
+AudioCi e un sistema web per la gestione e il broadcast di annunci audio e musica a bordo di navi. Progettato per essere semplice e intuitivo, permette agli operatori di riprodurre messaggi preregistrati e musica di sottofondo attraverso un'interfaccia a soundboard.
 
-## Architettura
+## Funzionalita
 
-```
-VM Ubuntu (Proxmox)                       PC Reception
-+---------------------+                   +---------------------+
-|  AudioCi         |                   |  Browser sempre     |
-|  Web Server         |<-- comandi -------|  aperto (PLAYER)    |
-|  + tutti gli MP3    |                   |                     |
-|                     |--- audio -------->|  Riproduce audio    |--> Impianto audio
-+---------------------+                   +---------------------+
-        ^
-        | comandi (play, stop, ecc.)
-        |
-+-------+-------+
-| Altri device  |  (tablet, smartphone, PC ufficiali)
-| CONTROLLER    |
-+---------------+
-```
+- **Soundboard UI** - Interfaccia a pulsanti per riproduzione rapida di annunci preregistrati
+- **Gestione Playlist** - Organizzazione e riproduzione di musica di sottofondo
+- **Sincronizzazione Real-time** - Stato di riproduzione sincronizzato tra tutti i client connessi
+- **Multi-utente** - Supporto per piu operatori simultanei con gestione conflitti
+- **Upload Audio** - Caricamento di nuovi file audio direttamente dall'interfaccia web
+- **Responsive Design** - Utilizzabile da PC, tablet e smartphone
 
-## Requisiti
+## Tecnologie
 
-- Ubuntu Server 24.04
-- Python 3.12+
-- 2 vCPU, 2-4 GB RAM
-- Storage per file MP3
+- **Frontend**: HTML5, CSS3, JavaScript
+- **Audio**: Web Audio API
+- **Real-time**: WebSocket per sincronizzazione
+- **Backend**: (opzionale) Server per gestione file e sync
 
 ## Installazione
 
-### 1. Clona il repository
-
 ```bash
-cd /home/ies
-git clone https://github.com/youruser/audioci.git audioci
-cd audioci
+# Clona il repository
+git clone https://github.com/furnaropolo/AudioCi.git
+cd AudioCi
+
+# Apri index.html nel browser oppure servi con un web server
+python3 -m http.server 8080
 ```
 
-### 2. Installa dipendenze sistema
-
-```bash
-sudo apt update
-sudo apt install -y python3 python3-pip python3-venv
-```
-
-### 3. Crea virtual environment e installa dipendenze Python
-
-```bash
-cd backend
-python3 -m venv venv
-source venv/bin/activate
-pip install fastapi uvicorn python-multipart aiosqlite python-jose passlib bcrypt==4.0.1 websockets
-```
-
-### 4. Crea le directory per gli audio
-
-```bash
-mkdir -p /home/ies/audioci/audio/{announcements,music}
-```
-
-### 5. Configura il servizio systemd
-
-```bash
-sudo tee /etc/systemd/system/audioci.service << 'EOF'
-[Unit]
-Description=AudioCi Backend
-After=network.target
-
-[Service]
-Type=simple
-User=ies
-WorkingDirectory=/home/ies/audioci/backend
-ExecStart=/home/ies/audioci/backend/venv/bin/uvicorn main:app --host 0.0.0.0 --port 8000
-Restart=always
-RestartSec=5
-
-[Install]
-WantedBy=multi-user.target
-EOF
-
-sudo systemctl daemon-reload
-sudo systemctl enable audioci
-sudo systemctl start audioci
-```
-
-### 6. Verifica
-
-```bash
-sudo systemctl status audioci
-curl http://localhost:8000/api/status
-```
+L'applicazione sara disponibile su `http://localhost:8080`
 
 ## Utilizzo
 
-### Accesso
+1. Apri l'applicazione nel browser
+2. Carica i file audio nella sezione dedicata
+3. Organizza i pulsanti della soundboard
+4. Clicca sui pulsanti per riprodurre gli annunci
+5. Usa i controlli playlist per la musica di sottofondo
 
-Apri nel browser: `http://IP_SERVER:8000`
+## Use Case
 
-**Credenziali default:**
-- Username: `admin`
-- Password: `admin`
-
-### Modalita'
-
-1. **PLAYER** - Da usare sul PC Reception collegato all'impianto audio
-   - Tieni il browser sempre aperto
-   - Riceve i comandi e riproduce l'audio
-
-2. **CONTROLLER** - Da usare su tablet, smartphone o altri PC
-   - Invia comandi al Player
-   - Naviga tra gruppi e annunci
-
-### Pannello Admin
-
-Solo gli utenti admin possono:
-- Creare/eliminare gruppi
-- Creare/eliminare annunci
-- Caricare file MP3
-- Gestire utenti
-
-## Struttura Progetto
-
-```
-audioci/
-├── backend/
-│   ├── main.py              # API FastAPI + WebSocket
-│   └── venv/                # Virtual environment
-├── frontend/
-│   └── index.html           # Interfaccia web
-├── audio/
-│   ├── announcements/       # File MP3 annunci
-│   └── music/               # File MP3 musica (futuro)
-├── docs/
-│   └── PROGETTO.md          # Documentazione dettagliata
-└── audioci.db            # Database SQLite (creato automaticamente)
-```
-
-## Stack Tecnologico
-
-| Componente | Tecnologia |
-|------------|------------|
-| Backend | Python + FastAPI |
-| Frontend | HTML/CSS/JS |
-| Realtime | WebSocket |
-| Database | SQLite |
-| Audio | Web Audio API |
-
-## Porte
-
-| Porta | Servizio |
-|-------|----------|
-| 8000 | HTTP (Web UI + API) |
-
-## Comandi utili
-
-```bash
-# Stato servizio
-sudo systemctl status audioci
-
-# Riavvio
-sudo systemctl restart audioci
-
-# Log
-sudo journalctl -u audioci -f
-
-# Log ultimi errori
-sudo journalctl -u audioci --no-pager -n 50
-```
-
-## Roadmap
-
-- [x] MVP con soundboard base
-- [x] Sistema Player/Controller
-- [x] Upload MP3
-- [x] Barra progresso audio
-- [ ] Sequenze annunci (multi-file)
-- [ ] Playlist musicale
-- [ ] Annunci live da smartphone (WebRTC)
-- [ ] Gestione rotte
+Sviluppato per l'utilizzo su navi Ro-Pax per:
+- Annunci di sicurezza
+- Comunicazioni ai passeggeri
+- Musica di sottofondo nelle aree comuni
+- Avvisi di imbarco/sbarco
 
 ## Licenza
 
-MIT License
+Questo progetto e rilasciato con licenza MIT.
 
----
+## Autore
 
-*Open Source Project*
+**Francesco Politano**
+- GitHub: [@furnaropolo](https://github.com/furnaropolo)
+- LinkedIn: [francesco-politano-b9161920](https://linkedin.com/in/francesco-politano-b9161920)
